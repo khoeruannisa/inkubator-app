@@ -13,8 +13,8 @@ Route::get('/', function () {
 
 // ─── AUTH (Guest Only) ───────────────────────────────────────────
 Route::middleware('guest')->group(function () {
-    Route::get('/login',   [AuthController::class, 'showLogin']);
-    Route::post('/login',  [AuthController::class, 'login']);
+    Route::get('/login',   [AuthController::class, 'showLogin'])->name('login');
+    Route::post('/login',  [AuthController::class, 'login'])->name('login.submit');
 
     Route::get('/register',  [AuthController::class, 'showRegister']);
     Route::post('/register', [AuthController::class, 'register']);
