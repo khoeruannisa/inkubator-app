@@ -1,67 +1,45 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Riwayat Inkubator</title>
+@extends('layout')
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@section('content')
 
-<body class="bg-light">
+<h4 class="mb-4 fw-bold">📋 Riwayat Data Inkubator</h4>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-dark bg-dark">
-  <div class="container">
-    <span class="navbar-brand">Riwayat Inkubator</span>
-    <a href="/dashboard" class="btn btn-light btn-sm">Dashboard</a>
-  </div>
-</nav>
-<head>
-    <meta charset="UTF-8">
-    <title>Kontrol Inkubator</title>
+<div class="card">
+    <div class="card-header bg-dark text-white d-flex justify-content-between align-items-center">
+        <h6 class="mb-0">Data per Hari / Jam</h6>
+        <span class="badge bg-secondary">{{ $riwayat->total() }} data</span>
+    </div>
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <div class="card-body">
 
-    <style>
-        body{
-            background: linear-gradient(135deg,#dbeafe,#bfdbfe,#93c5fd);
-            min-height:100vh;
-        }
-        </style>
-</head>
-
-<div class="container mt-4">
-    <div class="card shadow">
-
-        <div class="card-header bg-primary text-white">
-            <h4>Data Per Hari / Jam</h4>
-        </div>
-
-        <div class="card-body">
-
-            <!-- 🔍 FILTER TANGGAL -->
-            <form method="GET" action="/riwayat">
-                <div class="row">
-                    <div class="col-md-4">
-                        <input type="date" name="tanggal" class="form-control"
-                            value="{{ $tanggal }}">
-                    </div>
-                    <div class="col-md-4">
-                        <button class="btn btn-primary">🔍 Filter</button>
-                        <a href="/riwayat" class="btn btn-secondary">Reset</a>
-                    </div>
+        {{-- ─── FILTER TANGGAL ──────────────────────── --}}
+        <form method="GET" action="/riwayat" class="mb-3">
+            <div class="row g-2 align-items-end">
+                <div class="col-md-3">
+                    <label class="form-label small fw-bold">📅 Filter Tanggal</label>
+                    <input
+                        type="date"
+                        name="tanggal"
+                        class="form-control"
+                        value="{{ $tanggal }}">
                 </div>
-            </form>
+                <div class="col-md-3 d-flex gap-2">
+                    <button class="btn btn-primary">🔍 Filter</button>
+                    <a href="/riwayat" class="btn btn-outline-secondary">Reset</a>
+                </div>
+            </div>
+        </form>
 
-            <hr>
+        <hr>
 
-            <!-- 📊 TABEL -->
-            <table class="table table-bordered mt-3">
-                <thead>
+        {{-- ─── TABEL ────────────────────────────────── --}}
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
                     <tr>
                         <th>No</th>
-                        <th>Suhu</th>
-                        <th>Kelembapan</th>
+                        <th>Suhu (°C)</th>
+                        <th>Kelembapan (%)</th>
                         <th>Status</th>
                         <th>Tanggal</th>
                         <th>Jam</th>
@@ -70,24 +48,35 @@
                 <tbody>
                     @forelse($riwayat as $item)
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
+                        <td>{{ $riwayat->firstItem() + $loop->index }}</td>
                         <td>{{ $item->suhu }} °C</td>
                         <td>{{ $item->kelembapan ?? '-' }} %</td>
-                        <td>{{ $item->status }}</td>
-                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('Y-m-d') }}</td>
+                        <td>
+                            <span class="badge {{ str_contains($item->status, 'ON') ? 'bg-success' : 'bg-secondary' }}">
+                                {{ $item->status ?? '-' }}
+                            </span>
+                        </td>
+                        <td>{{ \Carbon\Carbon::parse($item->created_at)->format('d/m/Y') }}</td>
                         <td>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}</td>
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="6" class="text-center">Data tidak ditemukan</td>
+                        <td colspan="6" class="text-center text-muted py-4">
+                            📭 Data tidak ditemukan
+                            @if($tanggal)
+                                untuk tanggal <strong>{{ $tanggal }}</strong>
+                            @endif
+                        </td>
                     </tr>
                     @endforelse
                 </tbody>
             </table>
-
         </div>
+
+        {{-- ─── PAGINATION ──────────────────────────── --}}
+        {{ $riwayat->appends(['tanggal' => $tanggal])->links() }}
+
     </div>
 </div>
 
-</body>
-</html>
+@endsection

@@ -1,317 +1,191 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-    <meta charset="UTF-8">
-    <title>Kontrol Inkubator</title>
+@extends('layout')
 
-    <!-- Bootstrap -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+@section('content')
 
-<body class="bg-light">
+<h4 class="mb-4 fw-bold">🎛️ Kontrol Inkubator</h4>
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-dark bg-dark">
-  <div class="container">
-    <span class="navbar-brand">Kontrol Inkubator</span>
-    <a href="/dashboard" class="btn btn-light btn-sm">Dashboard</a>
-  </div>
-</nav>
-</head>
-<head>
-    <meta charset="UTF-8">
-    <title>Kontrol Inkubator</title>
+<style>
+    .card {
+        border: none;
+        border-radius: 16px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+        transition: transform 0.2s;
+    }
 
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    .card:hover {
+        transform: translateY(-3px);
+    }
 
-    <style>
-        body{
-            background: linear-gradient(135deg,#dbeafe,#bfdbfe,#93c5fd);
-            min-height:100vh;
-        }
+    .section-title {
+        font-size: 13px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
 
-        .navbar{
-            box-shadow:0 4px 10px rgba(0,0,0,0.2);
-        }
+    .status-badge {
+        font-size: 22px;
+        font-weight: 700;
+        text-align: center;
+        margin: 12px 0;
+    }
 
-        .card{
-            border:none;
-            border-radius:18px;
-            box-shadow:0 8px 20px rgba(0, 189, 157, 0.15);
-            transition:.3s;
-        }
+    .on  { color: #16a34a; }
+    .off { color: #6b7280; }
+</style>
 
-        .card:hover{
-            transform:translateY(-5px);
-        }
+{{-- ─── BARIS 1: Mode & Target ───────────────────────────── --}}
+<div class="row g-3 mb-4">
 
-        .title{
-            font-size:22px;
-            font-weight:bold;
-            color:#0d6efd;
-            text-align:center;
-        }
+    {{-- MODE OPERASI --}}
+    <div class="col-md-6">
+        <div class="card p-4 h-100">
+            <div class="section-title">⚙️ Mode Operasi</div>
+            <hr class="my-2">
 
-        h5{
-            text-align:center;
-            font-weight:bold;
-        }
+            @if(session('success'))
+                <div class="alert alert-success py-2 small">{{ session('success') }}</div>
+            @endif
 
-        .status{
-            font-size:24px;
-            font-weight:bold;
-            text-align:center;
-            color:#198754;
-            margin:15px 0;
-        }
-
-        .btn{
-            border-radius:10px;
-            font-weight:600;
-        }
-
-        label{
-            font-weight:600;
-        }
-    </style>
-
-</head>
-<body>
-
-<div class="container mt-4">
-
-
-    <div class="row">
-
-        <div class="col-md-6 d-flex">
-
-        <div class="card p-4 mb-3 w-100 h-90">
-
-                <div class="title">
-                    MODE OPERASI
-                </div>
-
-                <hr>
-
-                <form action="/mode" method="POST">
-
-                    @csrf
-
-                    <select class="form-select mb-3" name="mode">
-
-                        <option value="Otomatis"
-                        {{ $kontrol->mode=="Otomatis" ? 'selected' : '' }}>
-                        Otomatis
-                        </option>
-
-                        <option value="Manual"
-                        {{ $kontrol->mode=="Manual" ? 'selected' : '' }}>
-                        Manual
-                        </option>
-
-                    </select>
-
-                    <button class="btn btn-primary w-100">
-                        Simpan Mode
-                    </button>
-
-                </form>
-
-            </div>
-
+            <form action="/mode" method="POST">
+                @csrf
+                <select class="form-select mb-3" name="mode">
+                    <option value="Otomatis" {{ $kontrol->mode == 'Otomatis' ? 'selected' : '' }}>
+                        🤖 Otomatis
+                    </option>
+                    <option value="Manual" {{ $kontrol->mode == 'Manual' ? 'selected' : '' }}>
+                        🖐️ Manual
+                    </option>
+                </select>
+                <button class="btn btn-primary w-100">Simpan Mode</button>
+            </form>
         </div>
-
-        <div class="col-md-6">
-
-            <div class="card p-4 mb-3">
-
-                <div class="title">
-                    TARGET
-                </div>
-                
-
-                <hr>
-
-                <form action="/parameter" method="POST">
-
-                    @csrf
-
-                    <label>Target Suhu</label>
-
-                    <input
-                        type="number"
-                        step="0.1"
-                        name="target_suhu"
-                        class="form-control mb-3"
-                        value="{{ $kontrol->target_suhu }}">
-
-                    <label>Target Kelembapan</label>
-
-                    <input
-                        type="number"
-                        name="target_kelembapan"
-                        class="form-control mb-3"
-                        value="{{ $kontrol->target_kelembapan }}">
-
-                    <button class="btn btn-success w-100">
-                        Simpan Parameter
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-
     </div>
 
+    {{-- TARGET PARAMETER --}}
+    <div class="col-md-6">
+        <div class="card p-4 h-100">
+            <div class="section-title">🎯 Target Parameter</div>
+            <hr class="my-2">
 
-    <div class="row">
+            <form action="/parameter" method="POST">
+                @csrf
+                <label class="form-label fw-600 small">Suhu Target (°C)</label>
+                <input
+                    type="number"
+                    step="0.1"
+                    name="target_suhu"
+                    class="form-control mb-3"
+                    value="{{ $kontrol->target_suhu }}"
+                    min="30" max="45"
+                    required>
 
-        <div class="col-md-4">
+                <label class="form-label fw-600 small">Kelembapan Target (%)</label>
+                <input
+                    type="number"
+                    name="target_kelembapan"
+                    class="form-control mb-3"
+                    value="{{ $kontrol->target_kelembapan }}"
+                    min="40" max="90"
+                    required>
 
-            <div class="card p-4">
-
-                <h5>HEATER</h5>
-
-                <p class="status">
-
-                    {{ $kontrol->heater }}
-
-                </p>
-
-                <form action="/heater" method="POST">
-
-                    @csrf
-
-                    <input type="hidden" name="status"
-                    value="{{ $kontrol->heater=='ON' ? 'OFF' : 'ON' }}">
-
-                    <button class="btn btn-danger w-100">
-
-                        {{ $kontrol->heater=='ON' ? 'Matikan' : 'Hidupkan' }}
-
-                    </button>
-
-                </form>
-
-            </div>
-
+                <button class="btn btn-success w-100">Simpan Parameter</button>
+            </form>
         </div>
-
-
-        <div class="col-md-4">
-
-            <div class="card p-4">
-
-                <h5>MOTOR</h5>
-
-                <p class="status">
-
-                    {{ $kontrol->motor }}
-
-                </p>
-
-                <form action="/motor" method="POST">
-
-                    @csrf
-
-                    <input type="hidden" name="status"
-                    value="{{ $kontrol->motor=='ON' ? 'OFF' : 'ON' }}">
-
-                    <button class="btn btn-warning w-100">
-
-                        {{ $kontrol->motor=='ON' ? 'Matikan' : 'Hidupkan' }}
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-        
-
-
-        <div class="col-md-4">
-
-            <div class="card p-4">
-
-                <h5>KIPAS</h5>
-
-                <p class="status">
-
-                    {{ $kontrol->kipas }}
-
-                </p>
-
-                <form action="/kipas" method="POST">
-
-                    @csrf
-
-                    <input type="hidden" name="status"
-                    value="{{ $kontrol->kipas=='ON' ? 'OFF' : 'ON' }}">
-
-                    <button class="btn btn-success w-100">
-
-                        {{ $kontrol->kipas=='ON' ? 'Matikan' : 'Hidupkan' }}
-
-                    </button>
-
-                </form>
-
-            </div>
-
-        </div>
-        <div class="row mt-4">
-    <div class="col-md-12">
-
-        <div class="card shadow">
-
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0">Data Setting yang Tersimpan</h5>
-            </div>
-
-            <div class="card-body">
-
-                <table class="table table-bordered table-striped text-center">
-
-                    <thead class="table-light">
-
-                        <tr>
-                            <th>No</th>
-                            <th>Target Suhu (°C)</th>
-                            <th>Target Kelembapan (%)</th>
-                            <th>Mode Operasi</th>
-                            <th>Terakhir Diubah</th>
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        <tr>
-                            <td>1</td>
-                            <td>{{ $kontrol->target_suhu }}</td>
-                            <td>{{ $kontrol->target_kelembapan }}</td>
-                            <td>{{ $kontrol->mode }}</td>
-                            <td>{{ $kontrol->updated_at }}</td>
-                        </tr>
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        </div>
-
-    </div>
-</div>
-
     </div>
 
 </div>
 
-</body>
-</html>
+{{-- ─── BARIS 2: Toggle Perangkat ───────────────────────── --}}
+<div class="row g-3 mb-4">
+
+    {{-- HEATER --}}
+    <div class="col-md-4">
+        <div class="card p-4 text-center">
+            <div class="section-title">🔥 Heater</div>
+            <hr class="my-2">
+            <div class="status-badge {{ $kontrol->heater == 'ON' ? 'on' : 'off' }}">
+                {{ $kontrol->heater }}
+            </div>
+            <form action="/heater" method="POST">
+                @csrf
+                <input type="hidden" name="status" value="{{ $kontrol->heater == 'ON' ? 'OFF' : 'ON' }}">
+                <button class="btn w-100 {{ $kontrol->heater == 'ON' ? 'btn-danger' : 'btn-outline-success' }}">
+                    {{ $kontrol->heater == 'ON' ? '🔴 Matikan' : '🟢 Hidupkan' }}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {{-- MOTOR --}}
+    <div class="col-md-4">
+        <div class="card p-4 text-center">
+            <div class="section-title">⚙️ Motor Putar Telur</div>
+            <hr class="my-2">
+            <div class="status-badge {{ $kontrol->motor == 'ON' ? 'on' : 'off' }}">
+                {{ $kontrol->motor }}
+            </div>
+            <form action="/motor" method="POST">
+                @csrf
+                <input type="hidden" name="status" value="{{ $kontrol->motor == 'ON' ? 'OFF' : 'ON' }}">
+                <button class="btn w-100 {{ $kontrol->motor == 'ON' ? 'btn-warning' : 'btn-outline-warning' }}">
+                    {{ $kontrol->motor == 'ON' ? '🔴 Matikan' : '🟢 Hidupkan' }}
+                </button>
+            </form>
+        </div>
+    </div>
+
+    {{-- KIPAS --}}
+    <div class="col-md-4">
+        <div class="card p-4 text-center">
+            <div class="section-title">💨 Kipas</div>
+            <hr class="my-2">
+            <div class="status-badge {{ $kontrol->kipas == 'ON' ? 'on' : 'off' }}">
+                {{ $kontrol->kipas }}
+            </div>
+            <form action="/kipas" method="POST">
+                @csrf
+                <input type="hidden" name="status" value="{{ $kontrol->kipas == 'ON' ? 'OFF' : 'ON' }}">
+                <button class="btn w-100 {{ $kontrol->kipas == 'ON' ? 'btn-info' : 'btn-outline-info' }}">
+                    {{ $kontrol->kipas == 'ON' ? '🔴 Matikan' : '🟢 Hidupkan' }}
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{{-- ─── TABEL SETTING SAAT INI ─────────────────────────── --}}
+<div class="card">
+    <div class="card-header bg-dark text-white">
+        <h6 class="mb-0">📋 Setting Saat Ini</h6>
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-bordered mb-0 text-center">
+            <thead class="table-light">
+                <tr>
+                    <th>Target Suhu (°C)</th>
+                    <th>Target Kelembapan (%)</th>
+                    <th>Mode</th>
+                    <th>Terakhir Diubah</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>{{ $kontrol->target_suhu }}</strong></td>
+                    <td><strong>{{ $kontrol->target_kelembapan }}</strong></td>
+                    <td>
+                        <span class="badge {{ $kontrol->mode == 'Otomatis' ? 'bg-success' : 'bg-warning text-dark' }}">
+                            {{ $kontrol->mode }}
+                        </span>
+                    </td>
+                    <td>{{ $kontrol->updated_at ? \Carbon\Carbon::parse($kontrol->updated_at)->format('d/m/Y H:i') : '-' }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+@endsection

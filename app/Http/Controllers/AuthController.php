@@ -5,77 +5,88 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
-    // FORM LOGIN
+    // ─── FORM LOGIN ───────────────────────────────────────────────
     public function showLogin()
     {
+        // Jika sudah login, langsung ke dashboard
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
+
         return view('login');
     }
 
-    // FORM REGISTER
+    // ─── FORM REGISTER ────────────────────────────────────────────
     public function showRegister()
     {
+        if (Auth::check()) {
+            return redirect('/dashboard');
+        }
+
         return view('register');
     }
 
-    // 🔐 PROSES LOGIN
+    // ─── PROSES LOGIN ─────────────────────────────────────────────
     public function login(Request $request)
     {
-        $user = DB::table('users')
-            ->where('email', $request->email)
-            ->first();
+        $request->validate([
+            'email'    => 'required|email',
+            'password' => 'required',
+        ]);
 
-        // ❌ jika user tidak ada → arahkan ke register
-        if (!$user) {
+        // Cek apakah user terdaftar
+        $userExists = DB::table('users')->where('email', $request->email)->exists();
+
+        if (!$userExists) {
             return redirect('/register')
                 ->with('error', 'Akun belum terdaftar, silakan registrasi!');
         }
 
-        // ❌ jika password salah
-        if (!Hash::check($request->password, $user->password)) {
-            return back()->with('error', 'Password salah, coba lagi!');
+        // Autentikasi menggunakan Auth facade (benar & aman)
+        if (Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
+            $request->session()->regenerate();
+
+            return redirect('/dashboard')
+                ->with('success', 'Login berhasil!');
         }
 
-        // ✅ login berhasil
-        Session::put('user', $user);
-
-        return redirect('/dashboard')
-            ->with('success', 'Login berhasil!');
+        return back()->with('error', 'Password salah, coba lagi!');
     }
 
-    // 📝 PROSES REGISTER
+    // ─── PROSES REGISTER ──────────────────────────────────────────
     public function register(Request $request)
     {
         $request->validate([
-            'nama' => 'required',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:4'
+            'name'     => 'required|string|max:100',
+            'email'    => 'required|email|unique:users,email',
+            'password' => 'required|min:4',
         ]);
 
         DB::table('users')->insert([
-            'nama' => $request->nama,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'created_at' => now()
+            'name'       => $request->name,   // Kolom 'name' sesuai migration
+            'email'      => $request->email,
+            'password'   => Hash::make($request->password),
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
 
         return redirect('/login')
             ->with('success', 'Registrasi berhasil, silakan login!');
     }
 
-    // 🚪 LOGOUT
+    // ─── LOGOUT (POST) ────────────────────────────────────────────
     public function logout(Request $request)
-{
-    Auth::logout();
+    {
+        Auth::logout();
 
-    $request->session()->invalidate();
-    $request->session()->regenerateToken();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
 
-    return redirect('/login')
-        ->with('success', 'Berhasil logout');
-}
+        return redirect('/login')
+            ->with('success', 'Berhasil logout');
+    }
 }

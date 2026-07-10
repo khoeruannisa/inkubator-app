@@ -8,138 +8,43 @@ use Carbon\Carbon;
 
 class DashboardController extends Controller
 {
-    // ==========================
-    // DASHBOARD
-    // ==========================
-   public function index()
-{
-    $data = DB::table('inkubator')
-                ->latest('id')
-                ->first();
-
-    $riwayat = DB::table('inkubator')
-                    ->orderBy('id','desc')
-                    ->get();
-
-    $list = DB::table('inkubator')
-                ->orderBy('id','desc')
-                ->limit(10)
-                ->get();
-
-    $kontrol = DB::table('kontrol')
-                    ->where('id',1)
+    // ─── DASHBOARD ───────────────────────────────────────────────
+    public function index()
+    {
+        // Data sensor terbaru dari tabel sensors (sumber utama real-time)
+        $data = DB::table('sensors')
+                    ->latest('id')
                     ->first();
 
-    $start = DB::table('inkubator')
-                ->orderBy('created_at','asc')
-                ->first();
+        // 10 data terbaru untuk tabel di dashboard
+        $list = DB::table('sensors')
+                    ->orderBy('id', 'desc')
+                    ->limit(10)
+                    ->get();
 
-    if($start){
+        // Ambil kontrol (pastikan tidak null)
+        $kontrol = DB::table('kontrol')
+                        ->where('id', 1)
+                        ->first();
 
-        $usia = \Carbon\Carbon::parse($start->created_at)
-                    ->startOfDay()
-                    ->diffInDays(now()->startOfDay()) + 1;
+        // Hitung usia telur berdasarkan data pertama di inkubator
+        $start = DB::table('inkubator')
+                    ->orderBy('created_at', 'asc')
+                    ->first();
 
-    }else{
+        $usia = $start
+            ? Carbon::parse($start->created_at)->startOfDay()->diffInDays(now()->startOfDay()) + 1
+            : 0;
 
-        $usia = 0;
-
+        return view('dashboard', compact(
+            'data',
+            'kontrol',
+            'usia',
+            'list'
+        ));
     }
 
-    return view('dashboard', compact(
-        'data',
-        'riwayat',
-        'kontrol',
-        'usia',
-        'list'
-    ));
-}
-
-    // ==========================
-    // UPDATE SENSOR DARI WEBSITE
-    // ==========================
-    public function update(Request $request)
-    {
-        $request->validate([
-            'suhu' => 'required|numeric',
-            'kelembapan' => 'required|numeric'
-        ]);
-
-        $kontrol = DB::table('kontrol')->where('id', 1)->first();
-
-        $status = ($request->suhu < $kontrol->target_suhu)
-            ? 'Pemanas ON'
-            : 'Pemanas OFF';
-
-        DB::table('inkubator')->insert([
-            'suhu' => $request->suhu,
-            'kelembapan' => $request->kelembapan,
-            'status' => $status,
-            'created_at' => now()
-        ]);
-
-        DB::table('kontrol')
-            ->where('id', 1)
-            ->update([
-                'heater' => $status == 'Pemanas ON' ? 'ON' : 'OFF'
-            ]);
-
-        return back();
-    }
-
-    // ==========================
-    // SIMPAN PARAMETER
-    // ==========================
-    public function simpanKontrol(Request $request)
-    {
-        DB::table('kontrol')->updateOrInsert(
-            ['id' => 1],
-            [
-                'target_suhu' => $request->target_suhu,
-                'target_kelembapan' => $request->target_kelembapan,
-                'updated_at' => now()
-            ]
-        );
-
-        DB::table('setting_log')->insert([
-            'target_suhu' => $request->target_suhu,
-            'target_kelembapan' => $request->target_kelembapan,
-            'created_at' => now()
-        ]);
-
-        return redirect('/kontrol')
-            ->with('success', 'Parameter berhasil disimpan');
-    }
-
-    // ==========================
-    // API UNTUK ESP8266
-    // ==========================
-    public function getKontrol()
-    {
-        return response()->json(
-            DB::table('kontrol')
-                ->where('id', 1)
-                ->first()
-        );
-    }
-
-    // ==========================
-    // PUTAR TELUR
-    // ==========================
-    public function putarTelur()
-    {
-        DB::table('kontrol')
-            ->where('id', 1)
-            ->update([
-                'motor' => 'ON'
-            ]);
-
-        return back()->with('success', 'Motor berhasil dijalankan');
-    }
-
-    // ==========================
-    // RIWAYAT
-    // ==========================
+    // ─── RIWAYAT ─────────────────────────────────────────────────
     public function riwayat(Request $request)
     {
         $tanggal = $request->tanggal;
@@ -152,29 +57,21 @@ class DashboardController extends Controller
 
         $riwayat = $query
                     ->orderBy('created_at', 'desc')
-                    ->get();
+                    ->paginate(50); // Paginate agar tidak overload
 
         return view('riwayat', compact('riwayat', 'tanggal'));
     }
 
-    // ==========================
-    // LOGIN
-    // ==========================
-    public function login()
+    // ─── API GRAFIK (Dibatasi 100 data terakhir) ─────────────────
+    public function grafik()
     {
-        if (!session('login')) {
-            return redirect('/login');
-        }
+        $data = DB::table('inkubator')
+                    ->orderBy('created_at', 'desc')
+                    ->limit(100)
+                    ->get()
+                    ->sortBy('created_at')
+                    ->values();
 
-        return redirect('/dashboard');
+        return response()->json($data);
     }
-
-public function grafik()
-{
-    $data = DB::table('inkubator')
-                ->orderBy('created_at', 'asc')
-                ->get();
-
-    return response()->json($data);
-}
 }

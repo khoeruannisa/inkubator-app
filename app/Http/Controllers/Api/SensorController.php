@@ -3,26 +3,26 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Models\Sensor;
 
 class SensorController extends Controller
 {
-    public function store(Request $request)
-    {
-        $sensor = Sensor::create([
-            'suhu' => $request->suhu,
-            'kelembapan' => $request->kelembapan
-        ]);
-
-        return response()->json([
-            'status' => 'berhasil',
-            'data' => $sensor
-        ]);
-    }
-
+    /**
+     * Ambil data sensor terbaru untuk ditampilkan di dashboard website.
+     */
     public function index()
     {
-        return Sensor::latest()->first();
+        $sensor = Sensor::latest()->first();
+
+        if (!$sensor) {
+            return response()->json([
+                'suhu'       => 0,
+                'kelembapan' => 0,
+                'heater'     => 'OFF',
+                'motor'      => 'OFF',
+            ]);
+        }
+
+        return response()->json($sensor);
     }
 }
