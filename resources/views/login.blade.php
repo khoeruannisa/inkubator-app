@@ -3,643 +3,246 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Login ke sistem monitoring inkubator telur pintar">
     <title>Login — Inkubator Telur Pintar</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-
     <style>
-        *, *::before, *::after {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-
-        :root {
-            --blue-deep:   #0f1f3d;
-            --blue-mid:    #1a3a6b;
-            --blue-accent: #2563eb;
-            --blue-light:  #3b82f6;
-            --amber:       #f59e0b;
-            --amber-glow:  rgba(245,158,11,0.45);
-            --white:       #ffffff;
-            --slate-50:    #f8fafc;
-            --slate-100:   #f1f5f9;
-            --slate-200:   #e2e8f0;
-            --slate-400:   #94a3b8;
-            --slate-600:   #475569;
-            --slate-800:   #1e293b;
-            --slate-900:   #0f172a;
-            --radius-sm:   10px;
-            --radius-md:   16px;
-            --radius-lg:   22px;
-        }
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
         html, body {
-            height: 100%;
-            font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+            min-height: 100vh;
+            font-family: 'Plus Jakarta Sans', sans-serif;
             -webkit-font-smoothing: antialiased;
         }
 
         body {
-            display: grid;
-            grid-template-columns: 1fr 480px;
-            min-height: 100vh;
-            background: var(--slate-900);
-        }
-
-        /* ══════════════════════════════════════
-           HERO PANEL (kiri)
-        ══════════════════════════════════════ */
-        .hero {
-            position: relative;
             display: flex;
-            flex-direction: column;
+            align-items: center;
             justify-content: center;
-            align-items: flex-start;
-            padding: 60px 64px;
+            padding: 24px 16px;
+            background: #080d1a;
+            position: relative;
             overflow: hidden;
-            background: linear-gradient(135deg, var(--blue-deep) 0%, var(--blue-mid) 60%, #1e3a8a 100%);
         }
 
-        /* Animated orbs */
+        /* ── BACKGROUND ── */
+        .bg-mesh {
+            position: fixed; inset: 0; z-index: 0;
+            background:
+                radial-gradient(ellipse 70% 55% at 15% 10%, rgba(79,70,229,.32) 0%, transparent 60%),
+                radial-gradient(ellipse 55% 50% at 85% 85%, rgba(6,182,212,.24) 0%, transparent 55%),
+                radial-gradient(ellipse 45% 40% at 50% 50%, rgba(245,158,11,.1) 0%, transparent 55%),
+                radial-gradient(ellipse 60% 55% at 10% 88%, rgba(236,72,153,.16) 0%, transparent 55%),
+                linear-gradient(155deg, #080d1a 0%, #0f172a 60%, #0a1020 100%);
+        }
+
+        .bg-grid {
+            position: fixed; inset: 0; z-index: 0;
+            background-image:
+                linear-gradient(rgba(255,255,255,.022) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,.022) 1px, transparent 1px);
+            background-size: 44px 44px;
+        }
+
         .orb {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(60px);
-            animation: float 8s ease-in-out infinite;
+            position: fixed; border-radius: 50%;
+            filter: blur(72px); opacity: .55;
+            animation: drift linear infinite; z-index: 0;
+            pointer-events: none;
         }
-        .orb-1 {
-            width: 420px; height: 420px;
-            background: radial-gradient(circle, rgba(37,99,235,0.35), transparent 70%);
-            top: -120px; right: -80px;
-            animation-delay: 0s;
-        }
-        .orb-2 {
-            width: 280px; height: 280px;
-            background: radial-gradient(circle, rgba(245,158,11,0.2), transparent 70%);
-            bottom: -60px; left: -40px;
-            animation-delay: -3s;
-        }
-        .orb-3 {
-            width: 200px; height: 200px;
-            background: radial-gradient(circle, rgba(99,102,241,0.25), transparent 70%);
-            top: 40%; left: 20%;
-            animation-delay: -6s;
+        .orb-1 { width:480px;height:480px;background:rgba(79,70,229,.28);top:-140px;left:-90px;animation-duration:20s; }
+        .orb-2 { width:380px;height:380px;background:rgba(6,182,212,.22);bottom:-90px;right:-70px;animation-duration:24s;animation-delay:-8s; }
+        .orb-3 { width:280px;height:280px;background:rgba(245,158,11,.16);top:38%;right:8%;animation-duration:16s;animation-delay:-12s; }
+
+        @keyframes drift {
+            0%,100% { transform:translate(0,0) scale(1); }
+            33%      { transform:translate(25px,-18px) scale(1.04); }
+            66%      { transform:translate(-18px,25px) scale(.96); }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-20px) scale(1.05); }
+        /* ── CARD ── */
+        .card {
+            position: relative; z-index: 10;
+            width: 100%; max-width: 430px;
+            background: rgba(255,255,255,.04);
+            backdrop-filter: blur(28px);
+            -webkit-backdrop-filter: blur(28px);
+            border: 1px solid rgba(255,255,255,.09);
+            border-radius: 28px;
+            padding: 44px 40px 40px;
+            box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset, 0 40px 80px rgba(0,0,0,.55), 0 0 50px rgba(79,70,229,.1);
+            animation: cardIn .55s cubic-bezier(.34,1.56,.64,1) both;
+        }
+        @keyframes cardIn {
+            from { opacity:0; transform:translateY(28px) scale(.96); }
+            to   { opacity:1; transform:translateY(0) scale(1); }
+        }
+        .card::before {
+            content:''; position:absolute;
+            top:0; left:44px; right:44px; height:2px;
+            background:linear-gradient(90deg,transparent,rgba(99,102,241,.85),rgba(6,182,212,.85),transparent);
         }
 
-        /* Grid dots background */
-        .hero::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background-image: radial-gradient(circle, rgba(255,255,255,0.06) 1px, transparent 1px);
-            background-size: 32px 32px;
+        /* ── BRAND ── */
+        .brand {
+            display:flex; flex-direction:column;
+            align-items:center; margin-bottom:30px;
         }
-
-        .hero-content {
-            position: relative;
-            z-index: 2;
-            max-width: 460px;
+        .brand-icon {
+            width:62px; height:62px;
+            background:linear-gradient(135deg,#4f46e5,#06b6d4);
+            border-radius:19px;
+            display:flex; align-items:center; justify-content:center;
+            font-size:25px; color:#fff; margin-bottom:14px;
+            box-shadow:0 0 0 5px rgba(79,70,229,.18), 0 12px 30px rgba(79,70,229,.45);
+            animation:pulse 3s ease-in-out infinite;
         }
-
-        .hero-brand {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 56px;
+        @keyframes pulse {
+            0%,100% { box-shadow:0 0 0 5px rgba(79,70,229,.18),0 12px 30px rgba(79,70,229,.45); }
+            50%      { box-shadow:0 0 0 9px rgba(79,70,229,.09),0 16px 38px rgba(79,70,229,.55); }
         }
+        .brand-name { font-size:21px;font-weight:800;color:#fff;letter-spacing:-.4px;margin-bottom:4px; }
+        .brand-sub  { font-size:12.5px;color:rgba(255,255,255,.38);font-weight:500; }
 
-        .hero-brand-icon {
-            width: 50px;
-            height: 50px;
-            background: linear-gradient(135deg, var(--amber), #d97706);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
-            color: white;
-            box-shadow: 0 0 0 3px rgba(245,158,11,0.25), 0 8px 24px var(--amber-glow);
-            animation: pulse-amber 3s ease-in-out infinite;
+        /* ── FORM HEADING ── */
+        .fhead { text-align:center; margin-bottom:26px; }
+        .fhead h2 { font-size:18.5px;font-weight:800;color:#f1f5f9;letter-spacing:-.3px;margin-bottom:5px; }
+        .fhead p  { font-size:13px;color:rgba(255,255,255,.38); }
+
+        /* ── ALERTS ── */
+        .alert {
+            display:flex; align-items:flex-start; gap:10px;
+            padding:12px 15px; border-radius:12px;
+            font-size:13px; font-weight:500;
+            margin-bottom:18px;
+            animation:slideDown .3s ease;
         }
-
-        @keyframes pulse-amber {
-            0%, 100% { box-shadow: 0 0 0 3px rgba(245,158,11,0.25), 0 8px 24px var(--amber-glow); }
-            50% { box-shadow: 0 0 0 6px rgba(245,158,11,0.15), 0 12px 32px var(--amber-glow); }
-        }
-
-        .hero-brand-name {
-            font-size: 20px;
-            font-weight: 800;
-            color: var(--white);
-            line-height: 1.1;
-            letter-spacing: -0.3px;
-        }
-
-        .hero-brand-name small {
-            display: block;
-            font-size: 12px;
-            font-weight: 500;
-            color: rgba(255,255,255,0.45);
-            letter-spacing: 0;
-        }
-
-        .hero-title {
-            font-size: clamp(28px, 3.5vw, 38px);
-            font-weight: 800;
-            color: var(--white);
-            line-height: 1.15;
-            letter-spacing: -1px;
-            margin-bottom: 16px;
-        }
-
-        .hero-title span {
-            background: linear-gradient(135deg, #93c5fd, #60a5fa);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .hero-subtitle {
-            font-size: 15px;
-            color: rgba(255,255,255,0.5);
-            line-height: 1.7;
-            margin-bottom: 48px;
-            max-width: 380px;
-        }
-
-        /* Feature cards */
-        .feature-list {
-            display: flex;
-            flex-direction: column;
-            gap: 14px;
-        }
-
-        .feature-card {
-            display: flex;
-            align-items: center;
-            gap: 16px;
-            padding: 16px 20px;
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.08);
-            border-radius: var(--radius-md);
-            backdrop-filter: blur(8px);
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: default;
-        }
-
-        .feature-card:hover {
-            background: rgba(255,255,255,0.09);
-            border-color: rgba(255,255,255,0.14);
-            transform: translateX(6px);
-        }
-
-        .feature-icon {
-            width: 42px;
-            height: 42px;
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 17px;
-            flex-shrink: 0;
-        }
-
-        .feature-text h6 {
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--white);
-            margin: 0 0 3px;
-        }
-
-        .feature-text p {
-            font-size: 11.5px;
-            color: rgba(255,255,255,0.45);
-            margin: 0;
-            line-height: 1.5;
-        }
-
-        /* ══════════════════════════════════════
-           FORM PANEL (kanan)
-        ══════════════════════════════════════ */
-        .form-panel {
-            background: var(--white);
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            padding: 56px 48px;
-            overflow-y: auto;
-            position: relative;
-        }
-
-        /* Top decoration line */
-        .form-panel::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--blue-accent), #818cf8, var(--amber));
-        }
-
-        .form-badge {
-            display: inline-flex;
-            align-items: center;
-            gap: 7px;
-            background: #eff6ff;
-            color: #1d4ed8;
-            font-size: 11px;
-            font-weight: 700;
-            padding: 6px 14px;
-            border-radius: 20px;
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            margin-bottom: 20px;
-            width: fit-content;
-        }
-
-        .form-title {
-            font-size: clamp(22px, 2.5vw, 28px);
-            font-weight: 800;
-            color: var(--slate-900);
-            letter-spacing: -0.7px;
-            line-height: 1.2;
-            margin-bottom: 8px;
-        }
-
-        .form-subtitle {
-            font-size: 14px;
-            color: var(--slate-400);
-            margin-bottom: 36px;
-            line-height: 1.6;
-        }
-
-        /* Alert */
-        .alert-box {
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            padding: 14px 16px;
-            border-radius: var(--radius-sm);
-            font-size: 13px;
-            margin-bottom: 22px;
-            animation: slideDown 0.3s ease;
-        }
-
         @keyframes slideDown {
-            from { opacity: 0; transform: translateY(-8px); }
-            to { opacity: 1; transform: translateY(0); }
+            from{opacity:0;transform:translateY(-6px)}
+            to{opacity:1;transform:translateY(0)}
         }
+        .alert i { flex-shrink:0; margin-top:1px; }
+        .alert-danger  { background:rgba(239,68,68,.12);border:1px solid rgba(239,68,68,.22);color:#fca5a5; }
+        .alert-success { background:rgba(34,197,94,.12);border:1px solid rgba(34,197,94,.22);color:#86efac; }
 
-        .alert-box.danger {
-            background: #fff1f2;
-            color: #9f1239;
-            border-left: 4px solid #f43f5e;
-        }
-
-        .alert-box.success {
-            background: #f0fdf4;
-            color: #166534;
-            border-left: 4px solid #22c55e;
-        }
-
-        .alert-box i { flex-shrink: 0; margin-top: 1px; }
-
-        /* Input fields */
-        .field {
-            margin-bottom: 20px;
-        }
-
+        /* ── FIELDS ── */
+        .field { margin-bottom:16px; }
         .field-label {
-            display: block;
-            font-size: 11.5px;
-            font-weight: 700;
-            color: var(--slate-600);
-            text-transform: uppercase;
-            letter-spacing: 0.07em;
-            margin-bottom: 9px;
+            display:block; font-size:11px; font-weight:700;
+            color:rgba(255,255,255,.45); text-transform:uppercase;
+            letter-spacing:.08em; margin-bottom:8px;
         }
-
-        .field-wrap {
-            position: relative;
+        .field-wrap { position:relative; }
+        .field-input {
+            width:100%; padding:13px 14px 13px 44px;
+            background:rgba(255,255,255,.06);
+            border:1.5px solid rgba(255,255,255,.09);
+            border-radius:13px; font-size:14.5px; font-weight:500;
+            color:#f1f5f9; font-family:'Plus Jakarta Sans',sans-serif;
+            transition:all .22s ease; -webkit-appearance:none;
         }
+        .field-input::placeholder { color:rgba(255,255,255,.2); }
+        .field-input:focus {
+            outline:none;
+            background:rgba(255,255,255,.09);
+            border-color:rgba(99,102,241,.75);
+            box-shadow:0 0 0 4px rgba(99,102,241,.14);
+        }
+        .field-input.has-eye { padding-right:44px; }
+        .field-input.invalid { border-color:rgba(239,68,68,.55); background:rgba(239,68,68,.07); }
+        .field-input.invalid:focus { box-shadow:0 0 0 4px rgba(239,68,68,.12); }
 
         .field-icon {
-            position: absolute;
-            left: 16px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 15px;
-            color: var(--slate-400);
-            pointer-events: none;
-            transition: color 0.2s ease;
+            position:absolute; left:14px; top:50%; transform:translateY(-50%);
+            font-size:14px; color:rgba(255,255,255,.28); pointer-events:none;
+            transition:color .2s;
         }
-
-        .field-input {
-            width: 100%;
-            padding: 14px 44px 14px 46px;
-            border: 2px solid var(--slate-200);
-            border-radius: var(--radius-sm);
-            font-size: 14.5px;
-            font-weight: 500;
-            color: var(--slate-900);
-            background: var(--slate-50);
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            transition: all 0.22s ease;
-            -webkit-appearance: none;
-        }
-
-        .field-input::placeholder { color: var(--slate-400); }
-
-        .field-input:focus {
-            outline: none;
-            border-color: var(--blue-accent);
-            background: var(--white);
-            box-shadow: 0 0 0 4px rgba(37,99,235,0.1);
-        }
-
-        .field-input:focus + .field-icon,
-        .field-wrap:focus-within .field-icon {
-            color: var(--blue-accent);
-        }
-
-        .field-input.invalid {
-            border-color: #ef4444;
-            background: #fff5f5;
-        }
-
-        .field-input.invalid:focus {
-            box-shadow: 0 0 0 4px rgba(239,68,68,0.1);
-        }
+        .field-wrap:focus-within .field-icon { color:rgba(99,102,241,.9); }
 
         .eye-btn {
-            position: absolute;
-            right: 14px;
-            top: 50%;
-            transform: translateY(-50%);
-            background: none;
-            border: none;
-            color: var(--slate-400);
-            cursor: pointer;
-            padding: 4px;
-            border-radius: 6px;
-            transition: color 0.2s ease;
-            font-size: 14px;
+            position:absolute; right:13px; top:50%; transform:translateY(-50%);
+            background:none; border:none; color:rgba(255,255,255,.28);
+            cursor:pointer; padding:4px; border-radius:6px; font-size:13.5px;
+            transition:color .2s; line-height:1;
         }
-
-        .eye-btn:hover { color: var(--slate-600); }
+        .eye-btn:hover { color:rgba(255,255,255,.65); }
 
         .error-msg {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 12px;
-            color: #ef4444;
-            margin-top: 7px;
+            display:flex; align-items:center; gap:5px;
+            font-size:11.5px; color:#fca5a5; margin-top:6px;
         }
 
-        /* Submit button */
+        /* ── BUTTON ── */
         .btn-submit {
-            width: 100%;
-            padding: 15px;
-            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 50%, #1e40af 100%);
-            background-size: 200% 200%;
-            border: none;
-            border-radius: var(--radius-sm);
-            font-size: 15px;
-            font-weight: 700;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 6px 20px rgba(37,99,235,0.35);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
-            margin-top: 6px;
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            letter-spacing: 0.01em;
-            position: relative;
-            overflow: hidden;
+            width:100%; padding:14.5px; margin-top:8px;
+            background:linear-gradient(135deg,#4f46e5,#4338ca 55%,#3730a3);
+            border:none; border-radius:13px;
+            font-size:14.5px; font-weight:700; color:#fff;
+            cursor:pointer; font-family:'Plus Jakarta Sans',sans-serif;
+            transition:all .28s ease;
+            box-shadow:0 6px 22px rgba(79,70,229,.45);
+            display:flex; align-items:center; justify-content:center; gap:9px;
+            position:relative; overflow:hidden;
+        }
+        .btn-submit::before {
+            content:''; position:absolute; inset:0;
+            background:linear-gradient(135deg,rgba(255,255,255,.12),transparent 55%);
+        }
+        .btn-submit:hover { transform:translateY(-2px); box-shadow:0 12px 30px rgba(79,70,229,.58); }
+        .btn-submit:active { transform:translateY(0); }
+
+        /* ── DIVIDER + LINK ── */
+        .divider {
+            display:flex; align-items:center; gap:12px;
+            margin:22px 0; font-size:12px; color:rgba(255,255,255,.18); font-weight:600;
+        }
+        .divider::before,.divider::after { content:'';flex:1;height:1px;background:rgba(255,255,255,.07); }
+
+        .bottom-link { text-align:center; font-size:13.5px; color:rgba(255,255,255,.38); font-weight:500; }
+        .bottom-link a { color:#818cf8; font-weight:700; text-decoration:none; transition:color .2s; }
+        .bottom-link a:hover { color:#a5b4fc; }
+
+        .security {
+            display:flex; align-items:center; justify-content:center; gap:6px;
+            font-size:11px; color:rgba(255,255,255,.18); margin-top:18px;
         }
 
-        .btn-submit::after {
-            content: '';
-            position: absolute;
-            inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
-            opacity: 0;
-            transition: opacity 0.3s ease;
+        /* ── RESPONSIVE ── */
+        @media(max-width:480px) {
+            .card { padding:36px 22px 32px; border-radius:22px; }
+            .brand-icon { width:54px;height:54px;font-size:22px; }
+            .brand-name { font-size:18px; }
         }
-
-        .btn-submit:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 12px 28px rgba(37,99,235,0.45);
-        }
-
-        .btn-submit:hover::after { opacity: 1; }
-        .btn-submit:active { transform: translateY(0); }
-
-        /* Divider */
-        .or-divider {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin: 26px 0;
-            font-size: 12px;
-            color: var(--slate-400);
-            font-weight: 600;
-        }
-
-        .or-divider::before, .or-divider::after {
-            content: '';
-            flex: 1;
-            height: 1px;
-            background: var(--slate-200);
-        }
-
-        /* Bottom link */
-        .bottom-link {
-            text-align: center;
-            font-size: 14px;
-            color: var(--slate-400);
-            font-weight: 500;
-        }
-
-        .bottom-link a {
-            color: var(--blue-accent);
-            font-weight: 700;
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .bottom-link a:hover { color: #1d4ed8; text-decoration: underline; }
-
-        /* Security note */
-        .security-note {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            font-size: 11px;
-            color: var(--slate-400);
-            margin-top: 20px;
-        }
-
-        /* ══════════════════════════════════════
-           RESPONSIVE
-        ══════════════════════════════════════ */
-
-        /* Large tablet: shrink form panel */
-        @media (max-width: 1024px) {
-            body { grid-template-columns: 1fr 420px; }
-            .hero { padding: 48px 48px; }
-            .form-panel { padding: 48px 40px; }
-        }
-
-        /* Tablet portrait: stack vertically */
-        @media (max-width: 768px) {
-            body {
-                grid-template-columns: 1fr;
-                grid-template-rows: auto 1fr;
-                min-height: 100vh;
-                overflow-y: auto;
-            }
-
-            .hero {
-                padding: 40px 28px 36px;
-                align-items: center;
-                text-align: center;
-            }
-
-            .hero-brand { justify-content: center; margin-bottom: 28px; }
-
-            .hero-title { font-size: 24px; letter-spacing: -0.5px; }
-            .hero-subtitle { font-size: 13px; margin-bottom: 0; max-width: 100%; }
-
-            .feature-list { display: none; }
-
-            .form-panel {
-                padding: 40px 28px 48px;
-            }
-
-            .form-panel::before { height: 3px; }
-        }
-
-        /* Phone */
-        @media (max-width: 480px) {
-            .hero { padding: 32px 20px 28px; }
-            .hero-title { font-size: 21px; }
-            .hero-brand-name { font-size: 17px; }
-
-            .form-panel { padding: 32px 20px 44px; }
-            .form-title { font-size: 22px; }
-
-            .btn-submit { padding: 14px; font-size: 14px; }
-        }
-
-        /* Very small phones */
-        @media (max-width: 360px) {
-            .hero { padding: 24px 16px 20px; }
-            .form-panel { padding: 28px 16px 40px; }
+        @media(max-width:360px) {
+            .card { padding:28px 16px 26px; border-radius:18px; }
         }
     </style>
 </head>
 <body>
 
-<!-- ══════ HERO PANEL ══════ -->
-<div class="hero">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
+<div class="bg-mesh"></div>
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
 
-    <div class="hero-content">
-        <div class="hero-brand">
-            <div class="hero-brand-icon">
-                <i class="fa-solid fa-egg"></i>
-            </div>
-            <div class="hero-brand-name">
-                Inkubator Pintar
-                <small>Sistem Pemantauan Telur</small>
-            </div>
-        </div>
-
-        <h1 class="hero-title">
-            Selamat Datang<br>
-            <span>Kembali! 👋</span>
-        </h1>
-        <p class="hero-subtitle">
-            Masuk untuk memantau suhu, kelembapan, dan status perangkat inkubator Anda secara real-time dari mana saja.
-        </p>
-
-        <div class="feature-list">
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(251,191,36,0.12);">
-                    <i class="fa-solid fa-temperature-three-quarters" style="color:#fbbf24;"></i>
-                </div>
-                <div class="feature-text">
-                    <h6>Monitoring Real-time</h6>
-                    <p>Pantau suhu & kelembapan inkubator langsung dari browser</p>
-                </div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(52,211,153,0.12);">
-                    <i class="fa-solid fa-chart-area" style="color:#34d399;"></i>
-                </div>
-                <div class="feature-text">
-                    <h6>Grafik Interaktif</h6>
-                    <p>Visualisasi tren data sensor 100 data terakhir</p>
-                </div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(167,139,250,0.12);">
-                    <i class="fa-solid fa-robot" style="color:#a78bfa;"></i>
-                </div>
-                <div class="feature-text">
-                    <h6>Kontrol Otomatis</h6>
-                    <p>Heater, kipas & motor dikendalikan sistem secara cerdas</p>
-                </div>
-            </div>
-            <div class="feature-card">
-                <div class="feature-icon" style="background:rgba(103,232,249,0.12);">
-                    <i class="fa-solid fa-clock-rotate-left" style="color:#67e8f9;"></i>
-                </div>
-                <div class="feature-text">
-                    <h6>Riwayat Lengkap</h6>
-                    <p>Akses histori data sensor kapan saja</p>
-                </div>
-            </div>
-        </div>
+<div class="card">
+    <div class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-egg"></i></div>
+        <div class="brand-name">Inkubator Pintar</div>
+        <div class="brand-sub">Sistem Pemantauan Telur Otomatis</div>
     </div>
-</div>
 
-<!-- ══════ FORM PANEL ══════ -->
-<div class="form-panel">
-
-    <div class="form-badge">
-        <i class="fa-solid fa-lock"></i> Login Akun
+    <div class="fhead">
+        <h2>Selamat Datang Kembali 👋</h2>
+        <p>Masuk untuk memantau inkubator Anda secara real-time</p>
     </div>
-    <h2 class="form-title">Masuk ke Dashboard</h2>
-    <p class="form-subtitle">Gunakan email dan kata sandi yang telah Anda daftarkan.</p>
 
     @if(session('error'))
-        <div class="alert-box danger">
-            <i class="fa-solid fa-circle-exclamation"></i>
-            <div>{{ session('error') }}</div>
-        </div>
+        <div class="alert alert-danger"><i class="fa-solid fa-circle-exclamation"></i><span>{{ session('error') }}</span></div>
     @endif
-
     @if(session('success'))
-        <div class="alert-box success">
-            <i class="fa-solid fa-circle-check"></i>
-            <div>{{ session('success') }}</div>
-        </div>
+        <div class="alert alert-success"><i class="fa-solid fa-circle-check"></i><span>{{ session('success') }}</span></div>
     @endif
 
     <form method="POST" action="/login" id="loginForm">
@@ -648,79 +251,56 @@
         <div class="field">
             <label class="field-label" for="email">Alamat Email</label>
             <div class="field-wrap">
-                <input
-                    id="email"
-                    type="email"
-                    name="email"
+                <input id="email" type="email" name="email"
                     class="field-input @error('email') invalid @enderror"
                     placeholder="contoh@email.com"
                     value="{{ old('email') }}"
-                    autocomplete="email"
-                    required>
+                    autocomplete="email" required>
                 <i class="fa-solid fa-envelope field-icon"></i>
             </div>
             @error('email')
-                <div class="error-msg">
-                    <i class="fa-solid fa-circle-exclamation"></i> {{ $message }}
-                </div>
+                <div class="error-msg"><i class="fa-solid fa-circle-exclamation"></i> {{ $message }}</div>
             @enderror
         </div>
 
-        <div class="field" style="margin-bottom:28px;">
+        <div class="field" style="margin-bottom:24px;">
             <label class="field-label" for="password">Kata Sandi</label>
             <div class="field-wrap">
-                <input
-                    id="password"
-                    type="password"
-                    name="password"
-                    class="field-input"
+                <input id="password" type="password" name="password"
+                    class="field-input has-eye"
                     placeholder="Masukkan kata sandi"
-                    autocomplete="current-password"
-                    required>
+                    autocomplete="current-password" required>
                 <i class="fa-solid fa-lock field-icon"></i>
-                <button type="button" class="eye-btn" id="togglePwd" aria-label="Tampilkan kata sandi">
+                <button type="button" class="eye-btn" id="togglePwd" aria-label="Tampilkan sandi">
                     <i class="fa-solid fa-eye" id="eyeIcon"></i>
                 </button>
             </div>
         </div>
 
         <button type="submit" class="btn-submit" id="loginBtn">
-            <i class="fa-solid fa-right-to-bracket"></i>
-            Masuk Sekarang
+            <i class="fa-solid fa-right-to-bracket"></i> Masuk Sekarang
         </button>
     </form>
 
-    <div class="or-divider">atau</div>
-
-    <div class="bottom-link">
-        Belum punya akun? <a href="/register">Daftar gratis</a>
-    </div>
-
-    <div class="security-note">
-        <i class="fa-solid fa-shield-halved"></i>
-        Koneksi aman & terenkripsi — data Anda terlindungi
-    </div>
+    <div class="divider">atau</div>
+    <div class="bottom-link">Belum punya akun? <a href="/register">Daftar gratis</a></div>
+    <div class="security"><i class="fa-solid fa-shield-halved"></i> Koneksi aman &amp; terenkripsi</div>
 </div>
 
 <script>
-    // Toggle password visibility
     const togglePwd = document.getElementById('togglePwd');
     const pwdInput  = document.getElementById('password');
     const eyeIcon   = document.getElementById('eyeIcon');
-
     togglePwd.addEventListener('click', () => {
-        const isHidden = pwdInput.type === 'password';
-        pwdInput.type  = isHidden ? 'text' : 'password';
-        eyeIcon.className = isHidden ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
+        const show = pwdInput.type === 'password';
+        pwdInput.type = show ? 'text' : 'password';
+        eyeIcon.className = show ? 'fa-solid fa-eye-slash' : 'fa-solid fa-eye';
     });
-
-    // Loading state on submit
     document.getElementById('loginForm').addEventListener('submit', function() {
         const btn = document.getElementById('loginBtn');
         btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Memproses...';
         btn.disabled = true;
     });
 </script>
-
 </body>
 </html>
