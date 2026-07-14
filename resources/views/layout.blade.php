@@ -272,11 +272,19 @@
     </a>
     <a href="/kontrol" class="{{ request()->is('kontrol') ? 'active' : '' }}">
         <i class="fa-solid fa-sliders"></i>
-        <span>Kontrol Perangkat</span>
+        <span>Kontrol Parameter</span>
     </a>
     <a href="/riwayat" class="{{ request()->is('riwayat') ? 'active' : '' }}">
         <i class="fa-solid fa-clock-rotate-left"></i>
         <span>Riwayat Sensor</span>
+    </a>
+
+    <div style="height:1px;background:rgba(255,255,255,0.06);margin:12px 0;"></div>
+    <div style="font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:#475569;padding:4px 16px 8px;">Akun</div>
+
+    <a href="/register" class="{{ request()->is('register') ? 'active' : '' }}">
+        <i class="fa-solid fa-user-plus"></i>
+        <span>Tambah User</span>
     </a>
 
     <div class="sidebar-logout">

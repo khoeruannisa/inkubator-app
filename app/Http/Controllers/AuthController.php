@@ -21,12 +21,9 @@ class AuthController extends Controller
     }
 
     // ─── FORM REGISTER ────────────────────────────────────────────
+    // Bisa diakses admin yang sudah login untuk menambah user baru
     public function showRegister()
     {
-        if (Auth::check()) {
-            return redirect('/dashboard');
-        }
-
         return view('register');
     }
 

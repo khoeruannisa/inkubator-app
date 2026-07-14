@@ -2,319 +2,414 @@
 
 @section('content')
 
-<h4 class="mb-4 fw-bold text-dark">
-    <i class="fa-solid fa-sliders text-primary me-2"></i>Kontrol Perangkat & Parameter
-</h4>
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h4 class="fw-bold mb-1 text-dark">
+            <i class="fa-solid fa-sliders text-primary me-2"></i>Kontrol Parameter
+        </h4>
+        <p class="text-secondary mb-0 small">Atur parameter inkubator dalam mode otomatis</p>
+    </div>
+    <span class="badge rounded-pill fw-semibold py-2 px-3" style="background:#ede9fe;color:#5b21b6;font-size:12px;">
+        <i class="fa-solid fa-robot me-1"></i>Mode Otomatis Aktif
+    </span>
+</div>
 
 <style>
-    .card {
-        border: none;
+    .param-card {
+        background: #ffffff;
         border-radius: 20px;
-        box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+        box-shadow: 0 8px 24px rgba(0,0,0,0.06);
+        border: none;
         transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-        background: #ffffff;
-    }
-
-    .card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -6px rgba(0, 0, 0, 0.1);
-    }
-
-    .section-title {
-        font-size: 14px;
-        font-weight: 700;
-        text-transform: uppercase;
-        letter-spacing: 0.05em;
-        color: #64748b;
-        margin-bottom: 12px;
-        display: flex;
-        align-items: center;
-        gap: 8px;
-    }
-
-    .status-badge {
-        font-size: 26px;
-        font-weight: 800;
-        text-align: center;
-        margin: 16px 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 8px;
-    }
-
-    .on  { 
-        color: #10b981;
-        text-shadow: 0 0 15px rgba(16, 185, 129, 0.2);
-    }
-    .off { 
-        color: #94a3b8; 
-    }
-
-    .form-control, .form-select {
-        border-radius: 12px;
-        padding: 12px 16px;
-        border: 1px solid #e2e8f0;
-        font-weight: 500;
-        color: #334155;
-        transition: all 0.2s ease;
-    }
-
-    .form-control:focus, .form-select:focus {
-        border-color: #6366f1;
-        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.15);
-    }
-
-    .btn-submit {
-        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
-        border: none;
-        border-radius: 12px;
-        padding: 12px;
-        font-weight: 600;
-        color: white;
-        transition: all 0.25s ease;
-        box-shadow: 0 4px 12px rgba(79, 70, 229, 0.15);
-    }
-
-    .btn-submit:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 6px 18px rgba(79, 70, 229, 0.25);
-        background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
-    }
-
-    .toggle-card {
-        background: #ffffff;
-        border-radius: 20px;
-        padding: 24px;
-        text-align: center;
-        position: relative;
         overflow: hidden;
     }
 
-    .icon-circle {
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
+    .param-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+    }
+
+    .param-card-header {
+        padding: 20px 24px 0;
+    }
+
+    .param-card-body {
+        padding: 20px 24px 24px;
+    }
+
+    .section-label {
+        font-size: 11px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: #94a3b8;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+    }
+
+    .section-title {
+        font-size: 18px;
+        font-weight: 800;
+        color: #0f172a;
+        margin-bottom: 6px;
+        letter-spacing: -0.3px;
+    }
+
+    .section-desc {
+        font-size: 13px;
+        color: #64748b;
+        line-height: 1.6;
+        margin-bottom: 0;
+    }
+
+    .param-divider {
+        height: 1px;
+        background: linear-gradient(to right, #e2e8f0, transparent);
+        margin: 18px 0;
+    }
+
+    .form-label-custom {
+        font-size: 12px;
+        font-weight: 700;
+        color: #64748b;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+        margin-bottom: 8px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .form-control-custom {
+        border-radius: 14px;
+        padding: 13px 18px;
+        border: 2px solid #e2e8f0;
+        font-weight: 600;
+        color: #0f172a;
+        font-size: 16px;
+        transition: all 0.2s ease;
+        background-color: #f8fafc;
+        width: 100%;
+    }
+
+    .form-control-custom:focus {
+        outline: none;
+        border-color: #6366f1;
+        background-color: #ffffff;
+        box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+    }
+
+    .btn-save {
+        border: none;
+        border-radius: 14px;
+        padding: 14px 24px;
+        font-weight: 700;
+        font-size: 14px;
+        color: white;
+        transition: all 0.25s ease;
+        cursor: pointer;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 12px auto;
-        font-size: 24px;
-        transition: all 0.3s ease;
+        gap: 8px;
+        width: 100%;
     }
 
-    .icon-circle.active-heater { background-color: #fef2f2; color: #ef4444; }
-    .icon-circle.inactive-heater { background-color: #f1f5f9; color: #94a3b8; }
-
-    .icon-circle.active-motor { background-color: #faf5ff; color: #a855f7; }
-    .icon-circle.inactive-motor { background-color: #f1f5f9; color: #94a3b8; }
-
-    .icon-circle.active-kipas { background-color: #ecfeff; color: #06b6d4; }
-    .icon-circle.inactive-kipas { background-color: #f1f5f9; color: #94a3b8; }
-
-    /* soft badges */
-    .badge-soft-success {
-        background-color: #d1fae5;
-        color: #065f46;
+    .btn-save-indigo {
+        background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+        box-shadow: 0 6px 20px rgba(79,70,229,0.25);
     }
-    .badge-soft-warning {
-        background-color: #fef3c7;
-        color: #92400e;
+
+    .btn-save-indigo:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(79,70,229,0.35);
+        background: linear-gradient(135deg, #4338ca 0%, #3730a3 100%);
+    }
+
+    .btn-save-green {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        box-shadow: 0 6px 20px rgba(16,185,129,0.25);
+    }
+
+    .btn-save-green:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 28px rgba(16,185,129,0.35);
+        background: linear-gradient(135deg, #059669 0%, #047857 100%);
+    }
+
+    /* Info banner */
+    .auto-info-banner {
+        background: linear-gradient(135deg, #ede9fe 0%, #e0e7ff 100%);
+        border-radius: 16px;
+        padding: 18px 22px;
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        margin-bottom: 28px;
+        border-left: 4px solid #6366f1;
+    }
+
+    .auto-info-icon {
+        width: 44px;
+        height: 44px;
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        color: white;
+        flex-shrink: 0;
+    }
+
+    /* Status summary card */
+    .status-summary {
+        background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+        border-radius: 20px;
+        padding: 24px;
+        color: white;
+        box-shadow: 0 8px 30px rgba(15,23,42,0.3);
+    }
+
+    .status-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid rgba(255,255,255,0.07);
+    }
+
+    .status-item:last-child {
+        border-bottom: none;
+        padding-bottom: 0;
+    }
+
+    .status-item-label {
+        font-size: 12px;
+        color: #94a3b8;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    .status-item-value {
+        font-weight: 700;
+        font-size: 15px;
+    }
+
+    .badge-pill-green  { background: rgba(16,185,129,0.2); color: #34d399; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .badge-pill-yellow { background: rgba(245,158,11,0.2); color: #fbbf24; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+    .badge-pill-blue   { background: rgba(99,102,241,0.2); color: #a5b4fc; padding: 4px 12px; border-radius: 20px; font-size: 12px; }
+
+    /* Range slider style */
+    .range-row {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        margin-top: 8px;
+    }
+
+    .range-display {
+        font-size: 22px;
+        font-weight: 800;
+        color: #0f172a;
+        min-width: 80px;
+        text-align: center;
     }
 </style>
 
-{{-- ─── BARIS 1: Mode & Target ───────────────────────────── --}}
-<div class="row g-4 mb-4">
-
-    {{-- MODE OPERASI --}}
-    <div class="col-md-6">
-        <div class="card p-4 h-100">
-            <div class="section-title">
-                <i class="fa-solid fa-gears text-primary"></i>Mode Operasi
-            </div>
-            <p class="text-secondary small mb-4">Pilih mode operasi inkubator. Mode Otomatis akan menyesuaikan suhu & kelembapan berdasarkan sensor.</p>
-
-            <form action="/mode" method="POST">
-                @csrf
-                <div class="mb-4">
-                    <select class="form-select" name="mode">
-                        <option value="Otomatis" {{ $kontrol->mode == 'Otomatis' ? 'selected' : '' }}>
-                            🤖 Otomatis (Sistem Mandiri)
-                        </option>
-                        <option value="Manual" {{ $kontrol->mode == 'Manual' ? 'selected' : '' }}>
-                            🖐️ Manual (Kontrol Penuh)
-                        </option>
-                    </select>
-                </div>
-                <button type="submit" class="btn btn-submit w-100 py-3">
-                    <i class="fa-solid fa-floppy-disk me-2"></i>Simpan Mode
-                </button>
-            </form>
+{{-- ─── INFO BANNER OTOMATIS ─────────────────────────────── --}}
+<div class="auto-info-banner">
+    <div class="auto-info-icon">
+        <i class="fa-solid fa-robot"></i>
+    </div>
+    <div>
+        <div style="font-weight:700;color:#3730a3;margin-bottom:3px;">Sistem Berjalan Otomatis</div>
+        <div style="font-size:13px;color:#5b21b6;line-height:1.5;">
+            Inkubator akan mengatur heater, kipas, dan motor putar secara otomatis berdasarkan set point di bawah.
         </div>
     </div>
-
-    {{-- TARGET PARAMETER --}}
-    <div class="col-md-6">
-        <div class="card p-4 h-100">
-            <div class="section-title">
-                <i class="fa-solid fa-bullseye text-success"></i>Target Parameter
-            </div>
-            <p class="text-secondary small mb-3">Atur ambang batas suhu dan kelembapan inkubator untuk menjaga telur tetap stabil.</p>
-
-            <form action="/parameter" method="POST">
-                @csrf
-                <div class="row g-3 mb-4">
-                    <div class="col-6">
-                        <label class="form-label fw-semibold text-secondary small mb-2">
-                            <i class="fa-solid fa-temperature-half text-danger me-1"></i>Suhu Target (°C)
-                        </label>
-                        <input
-                            type="number"
-                            step="0.1"
-                            name="target_suhu"
-                            class="form-control"
-                            value="{{ $kontrol->target_suhu }}"
-                            min="30" max="45"
-                            required>
-                    </div>
-
-                    <div class="col-6">
-                        <label class="form-label fw-semibold text-secondary small mb-2">
-                            <i class="fa-solid fa-droplet text-primary me-1"></i>Kelembapan Target (%)
-                        </label>
-                        <input
-                            type="number"
-                            name="target_kelembapan"
-                            class="form-control"
-                            value="{{ $kontrol->target_kelembapan }}"
-                            min="40" max="90"
-                            required>
-                    </div>
-                </div>
-
-                <button type="submit" class="btn btn-submit w-100 py-3" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); box-shadow: 0 4px 12px rgba(16, 185, 129, 0.15);">
-                    <i class="fa-solid fa-circle-check me-2"></i>Simpan Parameter
-                </button>
-            </form>
-        </div>
-    </div>
-
 </div>
 
-{{-- ─── BARIS 2: Toggle Perangkat ───────────────────────── --}}
-<div class="row g-4 mb-4">
+{{-- ─── BARIS UTAMA: PARAMETER + STATUS ──────────────────── --}}
+<div class="row g-4">
 
-    {{-- HEATER --}}
-    <div class="col-md-4">
-        <div class="card toggle-card p-4 text-center">
-            <div class="section-title justify-content-center">
-                <i class="fa-solid fa-fire text-danger"></i>Heater
+    {{-- KOLOM KIRI: Form Parameter --}}
+    <div class="col-lg-8">
+
+        {{-- TARGET SUHU & KELEMBAPAN --}}
+        <div class="param-card mb-4">
+            <div class="param-card-header">
+                <div class="section-label">
+                    <i class="fa-solid fa-bullseye text-success"></i>Set Point Parameter
+                </div>
+                <div class="section-title">Target Suhu & Kelembapan</div>
+                <p class="section-desc">Atur ambang batas suhu dan kelembapan. Heater akan menyala secara otomatis jika di bawah target.</p>
             </div>
-            <hr class="my-2 opacity-10">
-            <div class="icon-circle {{ $kontrol->heater == 'ON' ? 'active-heater' : 'inactive-heater' }}">
-                <i class="fa-solid fa-fire-flame-curved {{ $kontrol->heater == 'ON' ? 'fa-bounce' : '' }}"></i>
+            <div class="param-divider"></div>
+            <div class="param-card-body pt-0">
+                <form action="/parameter" method="POST">
+                    @csrf
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label-custom">
+                                <i class="fa-solid fa-temperature-half text-danger"></i>Suhu Target (°C)
+                            </label>
+                            <input
+                                type="number"
+                                step="0.1"
+                                name="target_suhu"
+                                class="form-control-custom"
+                                value="{{ $kontrol->target_suhu }}"
+                                min="30" max="45"
+                                required>
+                            <div class="d-flex justify-content-between mt-2">
+                                <small class="text-secondary" style="font-size:11px;">Min: 30°C</small>
+                                <small class="text-secondary" style="font-size:11px;">Rekomendasi: 37-38°C</small>
+                                <small class="text-secondary" style="font-size:11px;">Max: 45°C</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label-custom">
+                                <i class="fa-solid fa-droplet text-primary"></i>Kelembapan Target (%)
+                            </label>
+                            <input
+                                type="number"
+                                name="target_kelembapan"
+                                class="form-control-custom"
+                                value="{{ $kontrol->target_kelembapan }}"
+                                min="40" max="90"
+                                required>
+                            <div class="d-flex justify-content-between mt-2">
+                                <small class="text-secondary" style="font-size:11px;">Min: 40%</small>
+                                <small class="text-secondary" style="font-size:11px;">Rekomendasi: 60-70%</small>
+                                <small class="text-secondary" style="font-size:11px;">Max: 90%</small>
+                            </div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-save btn-save-green">
+                        <i class="fa-solid fa-circle-check"></i>Simpan Parameter
+                    </button>
+                </form>
             </div>
-            <div class="status-badge {{ $kontrol->heater == 'ON' ? 'on' : 'off' }}">
-                <i class="fa-solid {{ $kontrol->heater == 'ON' ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
-                <span>{{ $kontrol->heater }}</span>
+        </div>
+
+        {{-- INFO CARA KERJA --}}
+        <div class="param-card">
+            <div class="param-card-header">
+                <div class="section-label">
+                    <i class="fa-solid fa-info-circle text-info"></i>Cara Kerja Otomatis
+                </div>
+                <div class="section-title">Logika Kontrol Sistem</div>
             </div>
-            <form action="/heater" method="POST">
-                @csrf
-                <input type="hidden" name="status" value="{{ $kontrol->heater == 'ON' ? 'OFF' : 'ON' }}">
-                <button type="submit" class="btn w-100 py-2.5 rounded-pill fw-semibold {{ $kontrol->heater == 'ON' ? 'btn-danger shadow-sm' : 'btn-outline-secondary' }}">
-                    {{ $kontrol->heater == 'ON' ? '🔴 Matikan' : '🟢 Hidupkan' }}
-                </button>
-            </form>
+            <div class="param-divider"></div>
+            <div class="param-card-body pt-0">
+                <div class="row g-3">
+                    <div class="col-md-4">
+                        <div style="background:#fef2f2;border-radius:14px;padding:16px;">
+                            <div style="width:36px;height:36px;background:#fca5a5;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                                <i class="fa-solid fa-fire text-danger"></i>
+                            </div>
+                            <div style="font-weight:700;color:#7f1d1d;font-size:13px;margin-bottom:4px;">Heater Otomatis</div>
+                            <div style="font-size:12px;color:#991b1b;line-height:1.5;">Menyala jika suhu < target. Mati jika suhu ≥ target.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="background:#eff6ff;border-radius:14px;padding:16px;">
+                            <div style="width:36px;height:36px;background:#93c5fd;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                                <i class="fa-solid fa-wind text-primary"></i>
+                            </div>
+                            <div style="font-weight:700;color:#1e3a5f;font-size:13px;margin-bottom:4px;">Kipas Otomatis</div>
+                            <div style="font-size:12px;color:#1d4ed8;line-height:1.5;">Berputar jika kelembapan < target untuk sirkulasi udara.</div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div style="background:#faf5ff;border-radius:14px;padding:16px;">
+                            <div style="width:36px;height:36px;background:#c4b5fd;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;">
+                                <i class="fa-solid fa-gear" style="color:#6d28d9;"></i>
+                            </div>
+                            <div style="font-weight:700;color:#3b0764;font-size:13px;margin-bottom:4px;">Motor Terjadwal</div>
+                            <div style="font-size:12px;color:#6d28d9;line-height:1.5;">Berputar setiap 3 jam sekali untuk pembalikan telur.</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    {{-- KOLOM KANAN: Status Saat Ini --}}
+    <div class="col-lg-4">
+        <div class="status-summary">
+            <div style="font-size:13px;font-weight:700;color:#94a3b8;text-transform:uppercase;letter-spacing:0.08em;margin-bottom:16px;">
+                <i class="fa-solid fa-signal me-2"></i>Status Konfigurasi
+            </div>
+
+            <div class="status-item">
+                <span class="status-item-label">Target Suhu</span>
+                <span class="status-item-value text-danger">{{ $kontrol->target_suhu }} °C</span>
+            </div>
+
+            <div class="status-item">
+                <span class="status-item-label">Target Kelembapan</span>
+                <span class="status-item-value text-info">{{ $kontrol->target_kelembapan }} %</span>
+            </div>
+
+            <div class="status-item">
+                <span class="status-item-label">Mode Operasi</span>
+                <span class="badge-pill-blue">
+                    <i class="fa-solid fa-robot me-1"></i>{{ $kontrol->mode ?? 'Otomatis' }}
+                </span>
+            </div>
+
+            <div class="status-item">
+                <span class="status-item-label">Status Heater</span>
+                @if(($kontrol->heater ?? 'OFF') == 'ON')
+                    <span class="badge-pill-green"><i class="fa-solid fa-fire me-1"></i>ON</span>
+                @else
+                    <span style="background:rgba(100,116,139,0.2);color:#94a3b8;padding:4px 12px;border-radius:20px;font-size:12px;">OFF</span>
+                @endif
+            </div>
+
+            <div class="status-item">
+                <span class="status-item-label">Status Motor</span>
+                @if(($kontrol->motor ?? 'OFF') == 'ON')
+                    <span class="badge-pill-yellow"><i class="fa-solid fa-gear fa-spin me-1"></i>ON</span>
+                @else
+                    <span style="background:rgba(100,116,139,0.2);color:#94a3b8;padding:4px 12px;border-radius:20px;font-size:12px;">OFF</span>
+                @endif
+            </div>
+
+            <div class="status-item">
+                <span class="status-item-label">Status Kipas</span>
+                @if(($kontrol->kipas ?? 'OFF') == 'ON')
+                    <span class="badge-pill-blue"><i class="fa-solid fa-fan fa-spin me-1"></i>ON</span>
+                @else
+                    <span style="background:rgba(100,116,139,0.2);color:#94a3b8;padding:4px 12px;border-radius:20px;font-size:12px;">OFF</span>
+                @endif
+            </div>
+
+            <div class="status-item">
+                <span class="status-item-label">Terakhir Diubah</span>
+                <span class="status-item-value" style="font-size:12px;color:#64748b;">
+                    {{ $kontrol->updated_at ? \Carbon\Carbon::parse($kontrol->updated_at)->format('d/m H:i') : '-' }}
+                </span>
+            </div>
+        </div>
+
+        {{-- Quick Info --}}
+        <div style="margin-top: 16px; background: linear-gradient(135deg, #fef3c7, #fde68a); border-radius: 16px; padding: 16px 18px; border-left: 4px solid #f59e0b;">
+            <div style="font-weight:700;color:#92400e;font-size:13px;margin-bottom:6px;">
+                <i class="fa-solid fa-lightbulb me-1"></i>Tips Penetasan
+            </div>
+            <div style="font-size:12px;color:#78350f;line-height:1.6;">
+                Suhu ideal <strong>37.5–38°C</strong> dan kelembapan <strong>60–65%</strong> untuk hasil penetasan terbaik.
+            </div>
         </div>
     </div>
 
-    {{-- MOTOR --}}
-    <div class="col-md-4">
-        <div class="card toggle-card p-4 text-center">
-            <div class="section-title justify-content-center">
-                <i class="fa-solid fa-gear text-purple"></i>Motor Putar Telur
-            </div>
-            <hr class="my-2 opacity-10">
-            <div class="icon-circle {{ $kontrol->motor == 'ON' ? 'active-motor' : 'inactive-motor' }}">
-                <i class="fa-solid fa-gear {{ $kontrol->motor == 'ON' ? 'fa-spin' : '' }}"></i>
-            </div>
-            <div class="status-badge {{ $kontrol->motor == 'ON' ? 'on' : 'off' }}">
-                <i class="fa-solid {{ $kontrol->motor == 'ON' ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
-                <span>{{ $kontrol->motor }}</span>
-            </div>
-            <form action="/motor" method="POST">
-                @csrf
-                <input type="hidden" name="status" value="{{ $kontrol->motor == 'ON' ? 'OFF' : 'ON' }}">
-                <button type="submit" class="btn w-100 py-2.5 rounded-pill fw-semibold {{ $kontrol->motor == 'ON' ? 'btn-warning text-dark shadow-sm' : 'btn-outline-secondary' }}">
-                    {{ $kontrol->motor == 'ON' ? '🔴 Matikan' : '🟢 Hidupkan' }}
-                </button>
-            </form>
-        </div>
-    </div>
-
-    {{-- KIPAS --}}
-    <div class="col-md-4">
-        <div class="card toggle-card p-4 text-center">
-            <div class="section-title justify-content-center">
-                <i class="fa-solid fa-wind text-info"></i>Kipas
-            </div>
-            <hr class="my-2 opacity-10">
-            <div class="icon-circle {{ $kontrol->kipas == 'ON' ? 'active-kipas' : 'inactive-kipas' }}">
-                <i class="fa-solid fa-fan {{ $kontrol->kipas == 'ON' ? 'fa-spin' : '' }}"></i>
-            </div>
-            <div class="status-badge {{ $kontrol->kipas == 'ON' ? 'on' : 'off' }}">
-                <i class="fa-solid {{ $kontrol->kipas == 'ON' ? 'fa-toggle-on' : 'fa-toggle-off' }}"></i>
-                <span>{{ $kontrol->kipas }}</span>
-            </div>
-            <form action="/kipas" method="POST">
-                @csrf
-                <input type="hidden" name="status" value="{{ $kontrol->kipas == 'ON' ? 'OFF' : 'ON' }}">
-                <button type="submit" class="btn w-100 py-2.5 rounded-pill fw-semibold {{ $kontrol->kipas == 'ON' ? 'btn-info text-white shadow-sm' : 'btn-outline-secondary' }}">
-                    {{ $kontrol->kipas == 'ON' ? '🔴 Matikan' : '🟢 Hidupkan' }}
-                </button>
-            </form>
-        </div>
-    </div>
-
-</div>
-
-{{-- ─── TABEL SETTING SAAT INI ─────────────────────────── --}}
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-white py-3 border-bottom d-flex align-items-center">
-        <h6 class="mb-0 fw-bold text-dark">
-            <i class="fa-solid fa-sliders text-secondary me-2"></i>Konfigurasi Aktif Saat Ini
-        </h6>
-    </div>
-    <div class="table-responsive">
-        <table class="table align-middle text-center mb-0">
-            <thead class="table-light text-secondary small text-uppercase">
-                <tr>
-                    <th class="py-3">Target Suhu</th>
-                    <th class="py-3">Target Kelembapan</th>
-                    <th class="py-3">Mode Operasi</th>
-                    <th class="py-3">Terakhir Diubah</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td class="py-3 fw-bold text-danger">
-                        <i class="fa-solid fa-temperature-half me-1"></i>{{ $kontrol->target_suhu }} °C
-                    </td>
-                    <td class="py-3 fw-bold text-primary">
-                        <i class="fa-solid fa-droplet me-1"></i>{{ $kontrol->target_kelembapan }} %
-                    </td>
-                    <td class="py-3">
-                        <span class="badge {{ $kontrol->mode == 'Otomatis' ? 'badge-soft-success' : 'badge-soft-warning' }} px-3 py-2 rounded-pill">
-                            <i class="fa-solid {{ $kontrol->mode == 'Otomatis' ? 'fa-robot' : 'fa-hand' }} me-1"></i>{{ $kontrol->mode }}
-                        </span>
-                    </td>
-                    <td class="py-3 text-secondary">
-                        <i class="fa-regular fa-clock me-1"></i>{{ $kontrol->updated_at ? \Carbon\Carbon::parse($kontrol->updated_at)->format('d/m/Y H:i') : '-' }}
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
 </div>
 
 @endsection

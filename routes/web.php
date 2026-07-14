@@ -16,9 +16,11 @@ Route::middleware('guest')->group(function () {
     Route::get('/login',   [AuthController::class, 'showLogin'])->name('login');
     Route::post('/login',  [AuthController::class, 'login'])->name('login.submit');
 
-    Route::get('/register',  [AuthController::class, 'showRegister']);
     Route::post('/register', [AuthController::class, 'register']);
 });
+
+// Halaman register bisa diakses semua (guest & admin yang mau tambah user)
+Route::get('/register', [AuthController::class, 'showRegister']);
 
 // ─── LOGOUT (POST — aman dari CSRF) ─────────────────────────────
 Route::post('/logout', [AuthController::class, 'logout'])->middleware('auth');
