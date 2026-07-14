@@ -19,10 +19,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            min-height: 100vh;
             padding: 24px 16px;
             background: #080d1a;
             position: relative;
-            overflow: hidden;
+            overflow-y: auto;
         }
 
         /* ── BACKGROUND ── */
