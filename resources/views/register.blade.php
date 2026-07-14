@@ -62,13 +62,13 @@
         /* ── CARD ── */
         .card {
             position: relative; z-index: 10;
-            width: 100%; max-width: 440px;
+            width: 100%; max-width: 380px;
             background: rgba(255,255,255,.04);
             backdrop-filter: blur(28px);
             -webkit-backdrop-filter: blur(28px);
             border: 1px solid rgba(255,255,255,.09);
-            border-radius: 28px;
-            padding: 42px 40px 38px;
+            border-radius: 24px;
+            padding: 36px 32px 32px;
             box-shadow: 0 0 0 1px rgba(255,255,255,.04) inset, 0 40px 80px rgba(0,0,0,.58), 0 0 50px rgba(124,58,237,.1);
             animation: cardIn .55s cubic-bezier(.34,1.56,.64,1) both;
         }
@@ -223,12 +223,12 @@
 
         /* ── RESPONSIVE ── */
         @media(max-width:480px) {
-            .card { padding:34px 22px 30px;border-radius:22px; }
-            .brand-icon { width:54px;height:54px;font-size:22px; }
+            .card { padding:28px 20px 26px;border-radius:20px; }
+            .brand-icon { width:50px;height:50px;font-size:20px; }
             .brand-name { font-size:18px; }
         }
         @media(max-width:360px) {
-            .card { padding:26px 16px 24px;border-radius:18px; }
+            .card { padding:22px 14px 22px;border-radius:16px; }
         }
     </style>
 </head>
