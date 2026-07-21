@@ -2,6 +2,11 @@
 
 @section('content')
 
+@php
+    // Null safety: jika sensors kosong, $data bisa null
+    $data = $data ?? (object)['suhu' => 0, 'kelembapan' => 0, 'heater' => 'OFF', 'motor' => 'OFF'];
+@endphp
+
 <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
     <div>
         <h4 class="fw-bold mb-1 text-dark">
@@ -540,6 +545,11 @@ function loadRealtime() {
                 motorIcon.className = 'fa-solid fa-gear fa-spin';
                 document.getElementById('motorInfo').innerHTML =
                     '<i class="fa-solid fa-arrows-spin fa-pulse me-1"></i>Motor sedang berputar';
+                // Hentikan countdown jika motor ON
+                if (countdownTimer) {
+                    clearInterval(countdownTimer);
+                    countdownTimer = null;
+                }
             } else {
                 motorIcon.className = 'fa-solid fa-gear';
                 // Hitung countdown berdasarkan motor_last_on dari server

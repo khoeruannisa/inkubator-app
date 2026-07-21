@@ -246,26 +246,35 @@ function generateAutoTimeline() {
     const durasi    = {{ $kontrol->motor_durasi_menit ?? 5 }};
 
     let html = '<div class="timeline-list">';
-    const now = new Date();
-    let slot  = 0;
+    const now  = new Date();
+    const nowH = now.getHours();
+    const nowM = now.getMinutes();
+    let slot   = 0;
 
     for (let h = 0; h < 24; h += interval) {
         slot++;
+        // Hitung waktu akhir dengan benar (overflow menit ke jam)
+        const endTotalMenit = h * 60 + durasi;
+        const endH  = Math.floor(endTotalMenit / 60) % 24;
         const start = String(h).padStart(2,'0') + ':00';
-        const end   = String(h).padStart(2,'0') + ':' + String(durasi).padStart(2,'0');
-        const isPast = h < now.getHours() || (h === now.getHours() && durasi < now.getMinutes());
-        const isNow  = h === Math.floor(now.getHours() / interval) * interval && !isPast;
+        const end   = String(endH).padStart(2,'0') + ':' + String(endTotalMenit % 60).padStart(2,'0');
 
-        let statusClass = isPast ? 'tl-done' : (isNow ? 'tl-active' : 'tl-pending');
-        let icon = isPast ? 'fa-circle-check text-success' : (isNow ? 'fa-arrows-spin fa-spin text-primary' : 'fa-clock text-secondary');
-        let label = isPast ? 'Selesai' : (isNow ? 'Sedang berjalan' : 'Terjadwal');
+        // isNow: jam slot = nowH DAN nowM masih dalam durasi
+        const isNow  = (nowH === h) && (nowM < durasi);
+        // isPast: jam slot sudah lewat, atau jam sama tapi sudah melewati durasi
+        const isPast = (nowH > h) || (nowH === h && nowM >= durasi);
+
+        const statusClass = isNow ? 'tl-active' : (isPast ? 'tl-done' : 'tl-pending');
+        const icon  = isNow ? 'fa-arrows-spin fa-spin text-primary' : (isPast ? 'fa-circle-check text-success' : 'fa-clock text-secondary');
+        const label = isNow ? 'Sedang berjalan' : (isPast ? 'Selesai' : 'Terjadwal');
+        const bg    = isNow ? '#dbeafe;color:#1e40af' : (isPast ? '#d1fae5;color:#065f46' : '#f1f5f9;color:#64748b');
 
         html += '<div class="tl-item ' + statusClass + '">';
         html += '<div class="tl-dot"><i class="fa-solid ' + icon + '"></i></div>';
         html += '<div class="tl-content">';
         html += '<div class="fw-bold small">Putaran #' + slot + '</div>';
-        html += '<div class="text-secondary" style="font-size:12px"><i class="fa-regular fa-clock me-1"></i>' + start + ' - ' + end + ' (' + durasi + ' menit)</div>';
-        html += '<span class="badge rounded-pill mt-1" style="font-size:10px;background:' + (isPast ? '#d1fae5;color:#065f46' : (isNow ? '#dbeafe;color:#1e40af' : '#f1f5f9;color:#64748b')) + '">' + label + '</span>';
+        html += '<div class="text-secondary" style="font-size:12px"><i class="fa-regular fa-clock me-1"></i>' + start + ' &ndash; ' + end + ' (' + durasi + ' menit)</div>';
+        html += '<span class="badge rounded-pill mt-1" style="font-size:10px;background:' + bg + '">' + label + '</span>';
         html += '</div></div>';
     }
     html += '</div>';

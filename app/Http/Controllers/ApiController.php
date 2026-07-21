@@ -3,9 +3,9 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Kontrol;
 use App\Models\Sensor;
-use App\Models\Inkubator;
 
 class ApiController extends Controller
 {
@@ -51,7 +51,7 @@ class ApiController extends Controller
         ]);
 
         // 2. Simpan ke tabel inkubator (dipakai grafik /api/suhu & riwayat)
-        \DB::table('inkubator')->insert([
+        DB::table('inkubator')->insert([
             'suhu'       => $suhu,
             'kelembapan' => $kelembapan,
             'status'     => 'Heater:' . $heater . ' Motor:' . $motor,
