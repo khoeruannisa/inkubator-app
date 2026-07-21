@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use App\Models\Kontrol;
 use Carbon\Carbon;
 
 class DashboardController extends Controller
@@ -22,10 +23,20 @@ class DashboardController extends Controller
                     ->limit(10)
                     ->get();
 
-        // Ambil kontrol (pastikan tidak null)
-        $kontrol = DB::table('kontrol')
-                        ->where('id', 1)
-                        ->first();
+        // FIX BUG #5: Gunakan firstOrCreate agar $kontrol tidak pernah null
+        $kontrol = Kontrol::firstOrCreate(
+            ['id' => 1],
+            [
+                'mode'               => 'Otomatis',
+                'heater'             => 'OFF',
+                'motor'              => 'OFF',
+                'kipas'              => 'OFF',
+                'target_suhu'        => 37.5,
+                'target_kelembapan'  => 65,
+                'motor_interval_jam' => 3,
+                'motor_durasi_menit' => 5,
+            ]
+        );
 
         // Hitung usia telur berdasarkan data pertama di inkubator
         $start = DB::table('inkubator')
@@ -57,12 +68,12 @@ class DashboardController extends Controller
 
         $riwayat = $query
                     ->orderBy('created_at', 'desc')
-                    ->paginate(50); // Paginate agar tidak overload
+                    ->paginate(50);
 
         return view('riwayat', compact('riwayat', 'tanggal'));
     }
 
-    // ─── API GRAFIK (Dibatasi 100 data terakhir) ─────────────────
+    // ─── API GRAFIK (Dibatasi 100 data terakhir dari inkubator) ──
     public function grafik()
     {
         $data = DB::table('inkubator')

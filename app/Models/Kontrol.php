@@ -14,6 +14,13 @@ class Kontrol extends Model
         'motor',
         'kipas',
         'target_suhu',
-        'target_kelembapan'
+        'target_kelembapan',
+        'motor_last_on',
+        'motor_interval_jam',
+        'motor_durasi_menit',
+    ];
+
+    protected $casts = [
+        'motor_last_on' => 'datetime',
     ];
 }

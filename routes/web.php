@@ -35,11 +35,13 @@ Route::middleware('auth')->group(function () {
     Route::get('/riwayat', [DashboardController::class, 'riwayat']);
 
     // Halaman Kontrol
-    Route::get('/kontrol',    [ControlController::class, 'index']);
-    Route::post('/mode',      [ControlController::class, 'updateMode']);
-    Route::post('/heater',    [ControlController::class, 'heater']);
-    Route::post('/motor',     [ControlController::class, 'motor']);
-    Route::post('/kipas',     [ControlController::class, 'kipas']);
-    Route::post('/parameter', [ControlController::class, 'parameter']);
+    Route::get('/kontrol',              [ControlController::class, 'index']);
+    Route::post('/mode',                [ControlController::class, 'updateMode']);
+    Route::post('/heater',              [ControlController::class, 'heater']);
+    Route::post('/motor',               [ControlController::class, 'motor']);
+    Route::post('/kipas',               [ControlController::class, 'kipas']);
+    Route::post('/parameter',           [ControlController::class, 'parameter']);
+    Route::post('/jadwal-motor',        [ControlController::class, 'jadwalMotor']);
+    Route::get('/kontrol/motor-timeline', [ControlController::class, 'motorTimeline']);
 
 });

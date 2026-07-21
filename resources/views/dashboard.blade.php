@@ -2,7 +2,7 @@
 
 @section('content')
 
-<div class="d-flex justify-content-between align-items-center mb-4">
+<div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
     <div>
         <h4 class="fw-bold mb-1 text-dark">
             <i class="fa-solid fa-chart-line text-primary me-2"></i>Dashboard Inkubator
@@ -22,7 +22,7 @@
 
     .stat-card {
         border-radius: 20px;
-        padding: 22px 20px;
+        padding: 20px 18px;
         color: white;
         position: relative;
         overflow: hidden;
@@ -60,54 +60,54 @@
         right: 50px;
     }
 
-    .stat-card:hover::before {
-        transform: scale(1.4);
-    }
+    .stat-card:hover::before { transform: scale(1.4); }
 
     .stat-card .icon-wrapper {
-        width: 46px;
-        height: 46px;
+        width: 44px;
+        height: 44px;
         background: rgba(255, 255, 255, 0.2);
-        border-radius: 14px;
+        border-radius: 12px;
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 20px;
-        margin-bottom: 14px;
+        font-size: 18px;
+        margin-bottom: 12px;
         backdrop-filter: blur(4px);
+        flex-shrink: 0;
     }
 
     .stat-card .stat-label {
-        font-size: 11px;
+        font-size: 10px;
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
         opacity: 0.8;
-        margin-bottom: 4px;
+        margin-bottom: 2px;
     }
 
     .stat-card .stat-value {
-        font-size: 26px;
+        font-size: 22px;
         font-weight: 800;
         line-height: 1.2;
         letter-spacing: -0.5px;
     }
 
     .stat-card .stat-sub {
-        font-size: 11px;
+        font-size: 10px;
         opacity: 0.7;
-        margin-top: 6px;
+        margin-top: 4px;
     }
 
     /* Gradients */
-    .bg-temp         { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); }
-    .bg-humi         { background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); }
-    .bg-heater-on    { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-    .bg-heater-off   { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
-    .bg-motor        { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
-    .bg-target-temp  { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
-    .bg-target-humi  { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
-    .bg-mode         { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+    .bg-temp        { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); }
+    .bg-humi        { background: linear-gradient(135deg, #0ea5e9 0%, #2563eb 100%); }
+    .bg-heater-on   { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .bg-heater-off  { background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
+    .bg-motor       { background: linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%); }
+    .bg-target-temp { background: linear-gradient(135deg, #f97316 0%, #ea580c 100%); }
+    .bg-target-humi { background: linear-gradient(135deg, #06b6d4 0%, #0891b2 100%); }
+    .bg-mode        { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+    .bg-kipas       { background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%); }
 
     /* Badges */
     .badge-soft-success  { background: #d1fae5; color: #065f46; }
@@ -129,11 +129,11 @@
         display: flex;
         justify-content: space-between;
         align-items: center;
+        flex-wrap: wrap;
+        gap: 8px;
     }
 
-    .chart-body {
-        padding: 16px 24px 24px;
-    }
+    .chart-body { padding: 16px 24px 24px; }
 
     .data-table-card {
         background: #ffffff;
@@ -148,9 +148,7 @@
         padding: 18px 24px;
     }
 
-    .table > :not(caption) > * > * {
-        padding: 14px 20px;
-    }
+    .table > :not(caption) > * > * { padding: 12px 16px; }
 
     .table thead th {
         font-size: 11px;
@@ -167,9 +165,7 @@
         transition: background 0.15s ease;
     }
 
-    .table tbody tr:hover {
-        background: #f8fafc;
-    }
+    .table tbody tr:hover { background: #f8fafc; }
 
     .empty-state {
         padding: 60px 20px;
@@ -184,7 +180,6 @@
         opacity: 0.5;
     }
 
-    /* Chart loading */
     .chart-loading {
         display: flex;
         align-items: center;
@@ -194,17 +189,24 @@
         flex-direction: column;
         gap: 12px;
     }
+
+    /* Responsif: di layar kecil tabel bisa scroll */
+    @media (max-width: 575.98px) {
+        .stat-card .stat-value { font-size: 18px; }
+        .stat-card { padding: 16px 14px; }
+        .chart-header { padding: 14px 16px 0; }
+        .chart-body { padding: 12px 16px 16px; }
+        .data-table-card .card-header { padding: 14px 16px; }
+    }
 </style>
 
 {{-- ─── KARTU STATUS ─────────────────────────────────────── --}}
 <div class="row g-3 mb-4">
 
     {{-- SUHU --}}
-    <div class="col-md-3 col-6">
+    <div class="col-6 col-md-3">
         <div class="stat-card bg-temp">
-            <div class="icon-wrapper">
-                <i class="fa-solid fa-temperature-three-quarters"></i>
-            </div>
+            <div class="icon-wrapper"><i class="fa-solid fa-temperature-three-quarters"></i></div>
             <div class="stat-label">Suhu Saat Ini</div>
             <div class="stat-value" id="suhu">{{ $data->suhu ?? 0 }} °C</div>
             <div class="stat-sub"><i class="fa-solid fa-circle-dot me-1"></i>Live</div>
@@ -212,11 +214,9 @@
     </div>
 
     {{-- KELEMBAPAN --}}
-    <div class="col-md-3 col-6">
+    <div class="col-6 col-md-3">
         <div class="stat-card bg-humi">
-            <div class="icon-wrapper">
-                <i class="fa-solid fa-droplet"></i>
-            </div>
+            <div class="icon-wrapper"><i class="fa-solid fa-droplet"></i></div>
             <div class="stat-label">Kelembapan</div>
             <div class="stat-value" id="kelembapan">{{ $data->kelembapan ?? 0 }} %</div>
             <div class="stat-sub"><i class="fa-solid fa-circle-dot me-1"></i>Live</div>
@@ -224,7 +224,7 @@
     </div>
 
     {{-- STATUS HEATER --}}
-    <div class="col-md-3 col-6">
+    <div class="col-6 col-md-3">
         <div id="heaterCard" class="stat-card {{ ($kontrol->heater ?? 'OFF') == 'ON' ? 'bg-heater-on' : 'bg-heater-off' }}">
             <div class="icon-wrapper">
                 <i id="heaterIcon" class="fa-solid fa-fire {{ ($kontrol->heater ?? 'OFF') == 'ON' ? 'fa-bounce' : '' }}"></i>
@@ -236,23 +236,21 @@
     </div>
 
     {{-- MOTOR --}}
-    <div class="col-md-3 col-6">
+    <div class="col-6 col-md-3">
         <div class="stat-card bg-motor">
             <div class="icon-wrapper">
                 <i id="motorIcon" class="fa-solid fa-gear {{ ($kontrol->motor ?? 'OFF') == 'ON' ? 'fa-spin' : '' }}"></i>
             </div>
             <div class="stat-label">Motor Putar</div>
             <div class="stat-value" id="motorStatus">{{ $kontrol->motor ?? 'OFF' }}</div>
-            <div class="stat-sub" id="motorInfo">Menunggu...</div>
+            <div class="stat-sub" id="motorInfo">Memuat info...</div>
         </div>
     </div>
 
     {{-- TARGET SUHU --}}
-    <div class="col-md-3 col-6">
+    <div class="col-6 col-md-3">
         <div class="stat-card bg-target-temp">
-            <div class="icon-wrapper">
-                <i class="fa-solid fa-bullseye"></i>
-            </div>
+            <div class="icon-wrapper"><i class="fa-solid fa-bullseye"></i></div>
             <div class="stat-label">Target Suhu</div>
             <div class="stat-value">{{ $kontrol->target_suhu ?? 37.5 }} °C</div>
             <div class="stat-sub">Set Point</div>
@@ -260,11 +258,9 @@
     </div>
 
     {{-- TARGET KELEMBAPAN --}}
-    <div class="col-md-3 col-6">
+    <div class="col-6 col-md-3">
         <div class="stat-card bg-target-humi">
-            <div class="icon-wrapper">
-                <i class="fa-solid fa-water"></i>
-            </div>
+            <div class="icon-wrapper"><i class="fa-solid fa-water"></i></div>
             <div class="stat-label">Target Lembap</div>
             <div class="stat-value">{{ $kontrol->target_kelembapan ?? 65 }} %</div>
             <div class="stat-sub">Set Point</div>
@@ -272,20 +268,18 @@
     </div>
 
     {{-- MODE --}}
-    <div class="col-md-3 col-6">
+    <div class="col-6 col-md-3">
         <div class="stat-card bg-mode">
-            <div class="icon-wrapper">
-                <i class="fa-solid fa-robot"></i>
-            </div>
+            <div class="icon-wrapper"><i class="fa-solid fa-robot"></i></div>
             <div class="stat-label">Mode Operasi</div>
-            <div class="stat-value" id="kontrolMode" style="font-size:20px;">{{ $kontrol->mode ?? 'Otomatis' }}</div>
+            <div class="stat-value" id="kontrolMode" style="font-size:18px;">{{ $kontrol->mode ?? 'Otomatis' }}</div>
             <div class="stat-sub">Sistem Mandiri</div>
         </div>
     </div>
 
     {{-- KIPAS --}}
-    <div class="col-md-3 col-6">
-        <div class="stat-card" style="background: linear-gradient(135deg, #06b6d4 0%, #0e7490 100%);">
+    <div class="col-6 col-md-3">
+        <div class="stat-card bg-kipas">
             <div class="icon-wrapper">
                 <i id="kipasIcon" class="fa-solid fa-fan {{ ($kontrol->kipas ?? 'OFF') == 'ON' ? 'fa-spin' : '' }}"></i>
             </div>
@@ -301,7 +295,7 @@
 <div class="chart-card mb-4">
     <div class="chart-header">
         <h5 class="fw-bold text-dark mb-0">
-            <i class="fa-solid fa-chart-area text-danger me-2"></i>Grafik Suhu & Kelembapan
+            <i class="fa-solid fa-chart-area text-danger me-2"></i>Grafik Suhu &amp; Kelembapan
         </h5>
         <span class="badge rounded-pill" style="background:#fef2f2;color:#dc2626;font-size:11px;padding:6px 14px;">
             <i class="fa-solid fa-rotate me-1"></i>Update tiap 10 detik
@@ -387,7 +381,6 @@
 {{-- ─── SCRIPTS ──────────────────────────────────────────── --}}
 <script>
 let chart = null;
-let chartInitialized = false;
 
 function loadChart() {
     fetch('/api/suhu')
@@ -396,7 +389,7 @@ function loadChart() {
             return res.json();
         })
         .then(data => {
-            const canvas = document.getElementById('chart');
+            const canvas  = document.getElementById('chart');
             const loading = document.getElementById('chartLoading');
 
             if (!data || data.length === 0) {
@@ -404,9 +397,8 @@ function loadChart() {
                 return;
             }
 
-            // Sembunyikan loading, tampilkan canvas
             loading.style.display = 'none';
-            canvas.style.display = 'block';
+            canvas.style.display  = 'block';
 
             const labels     = [];
             const suhuData   = [];
@@ -495,7 +487,7 @@ function loadChart() {
                         tooltip: {
                             backgroundColor: '#1e293b',
                             titleFont: { family: 'Plus Jakarta Sans', weight: '700' },
-                            bodyFont: { family: 'Plus Jakarta Sans' },
+                            bodyFont:  { family: 'Plus Jakarta Sans' },
                             padding: 12,
                             cornerRadius: 10,
                         }
@@ -512,6 +504,7 @@ function loadChart() {
 
 // ─── Realtime sensor update ───────────────────────────────
 function loadRealtime() {
+    // Update sensor (suhu, kelembapan, heater)
     fetch('/api/sensor')
         .then(res => res.json())
         .then(data => {
@@ -519,7 +512,6 @@ function loadRealtime() {
             document.getElementById('kelembapan').textContent = data.kelembapan + ' %';
             document.getElementById('heater').textContent     = data.heater;
 
-            // Heater Card
             const heaterCard = document.getElementById('heaterCard');
             const heaterIcon = document.getElementById('heaterIcon');
             if (data.heater === 'ON') {
@@ -532,25 +524,34 @@ function loadRealtime() {
         })
         .catch(() => {});
 
+    // Update kontrol (motor, kipas, mode) + countdown sinkron server
     fetch('/api/kontrol')
         .then(res => res.json())
         .then(data => {
-            document.getElementById('motorStatus').textContent = data.motor;
-            document.getElementById('kontrolMode').textContent = data.mode;
+            const motorStatus = data.motor  || 'OFF';
+            const kipasStatus = data.kipas  || 'OFF';
 
+            document.getElementById('motorStatus').textContent = motorStatus;
+            document.getElementById('kontrolMode').textContent = data.mode || '-';
+
+            // Motor icon
             const motorIcon = document.getElementById('motorIcon');
-            if (data.motor === 'ON') {
+            if (motorStatus === 'ON') {
                 motorIcon.className = 'fa-solid fa-gear fa-spin';
+                document.getElementById('motorInfo').innerHTML =
+                    '<i class="fa-solid fa-arrows-spin fa-pulse me-1"></i>Motor sedang berputar';
             } else {
                 motorIcon.className = 'fa-solid fa-gear';
+                // Hitung countdown berdasarkan motor_last_on dari server
+                updateCountdown(data.motor_last_on, data.motor_interval_jam || 3);
             }
 
-            // Kipas
-            const kipasIcon   = document.getElementById('kipasIcon');
-            const kipasStatus = document.getElementById('kipasStatus');
-            if (kipasStatus) kipasStatus.textContent = data.kipas || '-';
+            // Kipas icon
+            const kipasEl   = document.getElementById('kipasStatus');
+            const kipasIcon = document.getElementById('kipasIcon');
+            if (kipasEl)   kipasEl.textContent = kipasStatus;
             if (kipasIcon) {
-                kipasIcon.className = data.kipas === 'ON'
+                kipasIcon.className = kipasStatus === 'ON'
                     ? 'fa-solid fa-fan fa-spin'
                     : 'fa-solid fa-fan';
             }
@@ -558,34 +559,54 @@ function loadRealtime() {
         .catch(() => {});
 }
 
-// ─── Countdown motor ─────────────────────────────────────
-const intervalMotor = 3 * 60 * 60;
-let sisa = intervalMotor;
+// ─── Countdown motor sinkron dengan data server ───────────
+// Dihitung dari motor_last_on yang disimpan di DB
+let countdownTimer = null;
 
-setInterval(() => {
-    const status = document.getElementById('motorStatus').textContent.trim();
-    if (status === 'ON') {
-        document.getElementById('motorInfo').innerHTML = '<i class="fa-solid fa-arrows-spin fa-pulse me-1"></i>Motor sedang berputar';
-    } else {
-        sisa = Math.max(0, sisa - 1);
-        if (sisa <= 0) sisa = intervalMotor;
-        const jam   = Math.floor(sisa / 3600);
-        const menit = Math.floor((sisa % 3600) / 60);
-        const detik = sisa % 60;
+function updateCountdown(motorLastOn, intervalJam) {
+    if (countdownTimer) clearInterval(countdownTimer);
+
+    if (!motorLastOn) {
+        document.getElementById('motorInfo').innerHTML =
+            '<i class="fa-solid fa-hourglass-start me-1"></i>Belum ada data putar';
+        return;
+    }
+
+    const intervalDetik = intervalJam * 3600;
+    const lastOn        = new Date(motorLastOn).getTime();
+
+    function tick() {
+        const now        = Date.now();
+        const elapsed    = Math.floor((now - lastOn) / 1000);
+        const sisaDetik  = Math.max(0, intervalDetik - elapsed);
+
+        if (sisaDetik <= 0) {
+            document.getElementById('motorInfo').innerHTML =
+                '<i class="fa-solid fa-rotate me-1 text-warning"></i>Jadwal putar segera!';
+            return;
+        }
+
+        const jam   = Math.floor(sisaDetik / 3600);
+        const menit = Math.floor((sisaDetik % 3600) / 60);
+        const detik = sisaDetik % 60;
+
         document.getElementById('motorInfo').innerHTML =
             '<i class="fa-solid fa-hourglass-half me-1"></i>Putar lagi: '
             + String(jam).padStart(2, '0') + ':'
             + String(menit).padStart(2, '0') + ':'
             + String(detik).padStart(2, '0');
     }
-}, 1000);
+
+    tick();
+    countdownTimer = setInterval(tick, 1000);
+}
 
 // ─── Init ─────────────────────────────────────────────────
 document.addEventListener('DOMContentLoaded', function() {
     loadChart();
     loadRealtime();
-    setInterval(loadChart,    10000);
-    setInterval(loadRealtime,  3000);
+    setInterval(loadChart,     10000);
+    setInterval(loadRealtime,   3000);
 });
 </script>
 

@@ -153,7 +153,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 0 20px;
-            z-index: 90;
+            z-index: 98; /* Lebih rendah dari sidebar (100) tapi di atas konten */
             box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
 
@@ -227,6 +227,18 @@
             background-color: #fef2f2;
             color: #991b1b;
             border-left: 5px solid #ef4444;
+        }
+
+        .alert-warning {
+            background-color: #fffbeb;
+            color: #92400e;
+            border-left: 5px solid #f59e0b;
+        }
+
+        .alert-info {
+            background-color: #eff6ff;
+            color: #1e40af;
+            border-left: 5px solid #3b82f6;
         }
 
         .alert .btn-close {
