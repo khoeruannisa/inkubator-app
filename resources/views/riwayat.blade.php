@@ -67,21 +67,21 @@
                 <tr>
                     <td class="py-3 px-4 fw-medium text-secondary">{{ $riwayat->firstItem() + $loop->index }}</td>
                     <td class="py-3 fw-bold text-danger">
-                        <i class="fa-solid fa-temperature-half me-1"></i>{{ $item->suhu }} °C
+                        <i class="fa-solid fa-temperature-half me-1"></i>{{ $item->suhu ?? '-' }} °C
                     </td>
                     <td class="py-3 fw-bold text-primary">
                         <i class="fa-solid fa-droplet me-1"></i>{{ $item->kelembapan ?? '-' }} %
                     </td>
                     <td class="py-3">
-                        <span class="badge {{ str_contains($item->status, 'ON') ? 'badge-soft-success' : 'badge-soft-secondary' }} px-3 py-2 rounded-pill">
-                            <i class="fa-solid {{ str_contains($item->status, 'ON') ? 'fa-bolt' : 'fa-circle-pause' }} me-1"></i>{{ $item->status ?? '-' }}
+                        <span class="badge {{ str_contains($item->status ?? '', 'ON') ? 'badge-soft-success' : 'badge-soft-secondary' }} px-3 py-2 rounded-pill">
+                            <i class="fa-solid {{ str_contains($item->status ?? '', 'ON') ? 'fa-bolt' : 'fa-circle-pause' }} me-1"></i>{{ $item->status ?? '-' }}
                         </span>
                     </td>
                     <td class="py-3 text-dark fw-medium">
-                        <i class="fa-regular fa-calendar me-1 text-secondary"></i>{{ \Carbon\Carbon::parse($item->created_at)->format('d F Y') }}
+                        <i class="fa-regular fa-calendar me-1 text-secondary"></i>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('d F Y') : '-' }}
                     </td>
                     <td class="py-3 px-4 text-secondary">
-                        <i class="fa-regular fa-clock me-1 text-secondary"></i>{{ \Carbon\Carbon::parse($item->created_at)->format('H:i:s') }}
+                        <i class="fa-regular fa-clock me-1 text-secondary"></i>{{ $item->created_at ? \Carbon\Carbon::parse($item->created_at)->format('H:i:s') : '-' }}
                     </td>
                 </tr>
                 @empty
