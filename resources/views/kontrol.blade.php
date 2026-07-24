@@ -96,9 +96,8 @@
             <div class="p-3 p-md-4">
                 <table class="table table-borderless mb-0">
                     <tr><td class="text-secondary">Mode</td><td><span class="badge bg-success">{{ $kontrol->mode }}</span></td></tr>
-                    <tr><td class="text-secondary">Heater</td><td class="fw-bold">{{ $kontrol->heater }}</td></tr>
-                    <tr><td class="text-secondary">Motor</td><td class="fw-bold">{{ $kontrol->motor }}</td></tr>
-                    <tr><td class="text-secondary">Kipas</td><td class="fw-bold">{{ $kontrol->kipas }}</td></tr>
+                    <tr><td class="text-secondary">Lampu</td><td class="fw-bold">{{ $kontrol->motor }}</td></tr>
+                    <tr><td class="text-secondary">Motor Putar</td><td class="fw-bold">{{ $kontrol->kipas }}</td></tr>
                     <tr><td class="text-secondary">Interval Putar</td><td class="fw-bold">{{ $kontrol->motor_interval_jam ?? 3 }} Jam</td></tr>
                     <tr><td class="text-secondary">Durasi Putar</td><td class="fw-bold">{{ $kontrol->motor_durasi_menit ?? 5 }} Menit</td></tr>
                 </table>
@@ -127,28 +126,12 @@
 @if($kontrol->mode == 'Manual')
 {{-- ═══ MODE MANUAL ═══ --}}
 <div class="row g-3 mb-3">
-    {{-- HEATER --}}
-    <div class="col-sm-6 col-md-4">
-        <div class="ctrl-card text-center p-3 p-md-4 h-100">
-            <div class="device-icon bg-danger-soft"><i class="fa-solid fa-fire text-danger"></i></div>
-            <div class="device-label">HEATER</div>
-            <div class="device-status {{ $kontrol->heater=='ON' ? 'text-success':'text-secondary' }}">{{ $kontrol->heater }}</div>
-            <form action="/heater" method="POST">
-                @csrf
-                <input type="hidden" name="status" value="{{ $kontrol->heater=='ON' ? 'OFF':'ON' }}">
-                <button class="btn {{ $kontrol->heater=='ON' ? 'btn-danger':'btn-success' }} w-100 ctrl-btn">
-                    <i class="fa-solid {{ $kontrol->heater=='ON' ? 'fa-power-off':'fa-play' }} me-2"></i>
-                    {{ $kontrol->heater=='ON' ? 'Matikan':'Hidupkan' }}
-                </button>
-            </form>
-        </div>
-    </div>
 
-    {{-- MOTOR --}}
-    <div class="col-sm-6 col-md-4">
+    {{-- LAMPU --}}
+    <div class="col-sm-6 col-md-6">
         <div class="ctrl-card text-center p-3 p-md-4 h-100">
-            <div class="device-icon bg-purple-soft"><i class="fa-solid fa-gear text-purple"></i></div>
-            <div class="device-label">MOTOR PUTAR</div>
+            <div class="device-icon bg-purple-soft"><i class="fa-solid fa-lightbulb text-warning"></i></div>
+            <div class="device-label">LAMPU</div>
             <div class="device-status {{ $kontrol->motor=='ON' ? 'text-success':'text-secondary' }}">{{ $kontrol->motor }}</div>
             <form action="/motor" method="POST">
                 @csrf
@@ -161,11 +144,12 @@
         </div>
     </div>
 
-    {{-- KIPAS --}}
-    <div class="col-sm-6 col-md-4">
+
+    {{-- MOTOR PUTAR --}}
+    <div class="col-sm-6 col-md-6">
         <div class="ctrl-card text-center p-3 p-md-4 h-100">
-            <div class="device-icon bg-info-soft"><i class="fa-solid fa-fan text-info"></i></div>
-            <div class="device-label">KIPAS</div>
+            <div class="device-icon bg-info-soft"><i class="fa-solid fa-gear text-info"></i></div>
+            <div class="device-label">MOTOR PUTAR</div>
             <div class="device-status {{ $kontrol->kipas=='ON' ? 'text-success':'text-secondary' }}">{{ $kontrol->kipas }}</div>
             <form action="/kipas" method="POST">
                 @csrf
@@ -205,7 +189,7 @@
             <thead class="table-light">
                 <tr>
                     <th>Target Suhu</th><th>Target Lembap</th><th>Mode</th>
-                    <th>Heater</th><th>Motor</th><th>Kipas</th><th>Diubah</th>
+                    <th>Lampu</th><th>Motor Putar</th><th>Diubah</th>
                 </tr>
             </thead>
             <tbody>
@@ -217,7 +201,6 @@
                             {{ $kontrol->mode }}
                         </span>
                     </td>
-                    <td>{{ $kontrol->heater }}</td>
                     <td>{{ $kontrol->motor }}</td>
                     <td>{{ $kontrol->kipas }}</td>
                     <td>{{ $kontrol->updated_at ? \Carbon\Carbon::parse($kontrol->updated_at)->format('d-m-Y H:i') : '-' }}</td>

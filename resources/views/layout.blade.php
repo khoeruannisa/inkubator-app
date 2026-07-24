@@ -136,8 +136,61 @@
         .content {
             margin-left: var(--sidebar-width);
             padding: 40px;
+            padding-bottom: 80px;
             min-height: 100vh;
             transition: all 0.3s ease;
+        }
+
+        /* ─── FOOTER ──────────────────────── */
+        .app-footer {
+            margin-left: var(--sidebar-width);
+            background: #ffffff;
+            border-top: 1px solid #e5e7eb;
+            padding: 14px 40px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 50;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.04);
+        }
+
+        .app-footer img {
+            height: 36px;
+            width: auto;
+            object-fit: contain;
+        }
+
+        .app-footer-text {
+            display: flex;
+            flex-direction: column;
+            line-height: 1.3;
+        }
+
+        .app-footer-text .univ-name {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.2px;
+        }
+
+        .app-footer-text .prodi-name {
+            font-size: 11px;
+            font-weight: 500;
+            color: #64748b;
+        }
+
+        @media (max-width: 991.98px) {
+            .app-footer {
+                margin-left: 0;
+                padding: 12px 20px;
+            }
+            .content {
+                padding-bottom: 75px;
+            }
         }
 
         /* ─── MOBILE HEADER & OVERLAY ──────── */
@@ -188,6 +241,7 @@
                 margin-left: 0;
                 padding: 20px;
                 padding-top: 24px;
+                padding-bottom: 75px;
             }
         }
 
@@ -336,6 +390,15 @@
 
     @yield('content')
 </div>
+
+<!-- FOOTER -->
+<footer class="app-footer">
+    <img src="/uhn.png" alt="Logo Universitas Harkat Negeri">
+    <div class="app-footer-text">
+        <span class="univ-name">Universitas Harkat Negeri</span>
+        <span class="prodi-name">Program Studi D3 Teknik Komputer</span>
+    </div>
+</footer>
 
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
